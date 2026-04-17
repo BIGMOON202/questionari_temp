@@ -1,0 +1,94 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  background: #efeff3;
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.995);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes button-pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.97);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.mobile-home,
+.personal-page,
+.questions-page,
+.invoice-page,
+.confirmation-page {
+  animation: page-enter 320ms ease-out both;
+}
+
+.cta,
+.personal-cta,
+.question-option,
+.invoice-upload-button,
+.invoice-cta {
+  transition:
+    transform 140ms ease,
+    filter 200ms ease,
+    box-shadow 200ms ease;
+  will-change: transform;
+}
+
+.cta:hover,
+.personal-cta:hover,
+.question-option:hover,
+.invoice-upload-button:hover,
+.invoice-cta:hover {
+  filter: brightness(1.04);
+}
+
+.cta:active,
+.personal-cta:active,
+.question-option:active,
+.invoice-upload-button:active,
+.invoice-cta:active {
+  animation: button-pop 180ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-home,
+  .personal-page,
+  .questions-page,
+  .invoice-page,
+  .confirmation-page {
+    animation: none;
+  }
+
+  .cta,
+  .personal-cta,
+  .question-option,
+  .invoice-upload-button,
+  .invoice-cta {
+    transition: none;
+  }
+}

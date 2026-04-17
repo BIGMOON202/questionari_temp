@@ -1,0 +1,236 @@
+.invoice-page {
+  min-height: 100svh;
+  height: 100svh;
+  height: 100dvh;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Heebo', 'Rubik', Arial, sans-serif;
+  overflow: hidden;
+  color: #1b1b24;
+}
+
+.invoice-card {
+  width: 100%;
+  max-width: 100%;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1;
+}
+
+.invoice-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.invoice-header-logo {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.invoice-content {
+  padding: 23px 16px 16px;
+}
+
+.stepper {
+  margin-bottom: 28px;
+}
+
+.stepper-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  gap: 4px;
+}
+
+.stepper-list::before {
+  content: '';
+  position: absolute;
+  top: 14px;
+  left: 18%;
+  right: 18%;
+  height: 2px;
+  background: #f5f2ff;
+  z-index: 0;
+}
+
+.stepper-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.stepper-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  background: #fff;
+  color: #443fe599;
+  border: 2px solid #f5f2ff;
+  box-sizing: border-box;
+  padding-top: 2px;
+}
+
+.stepper-item.is-active .stepper-circle {
+  background: #443fe5;
+  color: #fff;
+  border-color: #443fe5;
+}
+
+.stepper-label {
+  font-size: 12px;
+  line-height: 24px;
+  color: #000;
+  max-width: 92px;
+  text-align: center;
+}
+
+.invoice-title {
+  margin: 0 0 16px;
+  font-size: 40px;
+  line-height: 1.05;
+  font-weight: 700;
+  color: #1b1b24;
+  text-align: center;
+}
+
+.invoice-upload-box {
+  width: 342px;
+  max-width: 100%;
+  height: 308px;
+  margin: 0 auto 34px;
+  border: 2px dashed #443fe5;
+  border-radius: 32px;
+  padding: 36px 18px 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.invoice-upload-icon {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+.invoice-upload-heading {
+  margin: 18px 0 6px;
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #1b1b24;
+}
+
+.invoice-upload-subtext {
+  margin: 0 0 18px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #464555;
+}
+
+.invoice-upload-button {
+  width: 236px;
+  height: 48px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0148a7 0%, #5e5cff 100%);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 0 16px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: inherit;
+}
+
+.invoice-upload-button-icon {
+  width: 22px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.invoice-file-input {
+  display: none;
+}
+
+.invoice-file-name {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: #464555;
+}
+
+.invoice-error {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #c62828;
+}
+
+.invoice-bottom {
+  flex-shrink: 0;
+  padding-inline: 16px;
+  padding-top: 10px;
+  padding-bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+}
+
+.invoice-cta {
+  width: min(342px, 100%);
+  height: 68px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #2144df 0%, #4f5dff 100%);
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+  box-shadow:
+    0 8px 10px -6px #c7d2fe,
+    0 20px 25px -5px #c7d2fe;
+}
+
+.invoice-cta:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.invoice-footer-brand {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.invoice-playground-logo {
+  height: 28px;
+  width: auto;
+  opacity: 0.85;
+}
+
