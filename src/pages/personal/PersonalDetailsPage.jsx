@@ -20,21 +20,72 @@ export function PersonalDetailsPage() {
   const [form, setForm] = useState(initialForm)
   const [acceptedTerms, setAcceptedTerms] = useState(false)
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false)
+  const [isBirthDateModalOpen, setIsBirthDateModalOpen] = useState(false)
+  const [birthDateView, setBirthDateView] = useState(() => {
+    const today = new Date()
+    return { month: today.getMonth(), year: today.getFullYear() }
+  })
   const termsModalCloseRef = useRef(null)
   const isFormFilled = Object.values(form).every((value) => value.trim() !== '')
   const canProceed = isFormFilled && acceptedTerms
+  const selectedBirthDate = form.birthDate ? new Date(form.birthDate) : null
 
   function updateField(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }))
   }
 
-  function formatBirthDate(value) {
-    const digitsOnly = value.replace(/\D/g, '').slice(0, 8)
-
-    if (digitsOnly.length <= 2) return digitsOnly
-    if (digitsOnly.length <= 4) return `${digitsOnly.slice(0, 2)}/${digitsOnly.slice(2)}`
-    return `${digitsOnly.slice(0, 2)}/${digitsOnly.slice(2, 4)}/${digitsOnly.slice(4)}`
+  function handleIdNumberChange(value) {
+    const digitsOnly = value.replace(/\D/g, '').slice(0, 9)
+    updateField('idNumber', digitsOnly)
   }
+
+  function formatBirthDateForDisplay(value) {
+    if (!value) return ''
+    const [year, month, day] = value.split('-')
+    if (!year || !month || !day) return ''
+    return `${day}/${month}/${year}`
+  }
+
+  function openBirthDateModal() {
+    if (form.birthDate) {
+      const selectedDate = new Date(form.birthDate)
+      setBirthDateView({ month: selectedDate.getMonth(), year: selectedDate.getFullYear() })
+    } else {
+      const today = new Date()
+      setBirthDateView({ month: today.getMonth(), year: today.getFullYear() })
+    }
+    setIsBirthDateModalOpen(true)
+  }
+
+  function closeBirthDateModal() {
+    setIsBirthDateModalOpen(false)
+  }
+
+  function handleBirthDateSelect(date) {
+    const year = String(date.getFullYear())
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    updateField('birthDate', `${year}-${month}-${day}`)
+    closeBirthDateModal()
+  }
+
+  function changeBirthDateMonth(delta) {
+    const next = new Date(birthDateView.year, birthDateView.month + delta, 1)
+    setBirthDateView({ month: next.getMonth(), year: next.getFullYear() })
+  }
+
+  const monthStartDay = new Date(birthDateView.year, birthDateView.month, 1).getDay()
+  const daysInMonth = new Date(birthDateView.year, birthDateView.month + 1, 0).getDate()
+  const leadingEmptyCells = Array.from({ length: monthStartDay })
+  const calendarDays = Array.from({ length: daysInMonth }, (_, index) => {
+    const day = index + 1
+    const date = new Date(birthDateView.year, birthDateView.month, day)
+    const iso = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+    return { day, date, iso }
+  })
+  const monthLabel = new Intl.DateTimeFormat('he-IL', { month: 'long', year: 'numeric' }).format(
+    new Date(birthDateView.year, birthDateView.month, 1),
+  )
 
   function closeTermsModal() {
     setIsTermsModalOpen(false)
@@ -53,18 +104,21 @@ export function PersonalDetailsPage() {
   }
 
   useEffect(() => {
-    if (!isTermsModalOpen) return
+    if (!isTermsModalOpen && !isBirthDateModalOpen) return
     const prevOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     function onKeyDown(e) {
-      if (e.key === 'Escape') closeTermsModal()
+      if (e.key === 'Escape') {
+        if (isBirthDateModalOpen) closeBirthDateModal()
+        if (isTermsModalOpen) closeTermsModal()
+      }
     }
     document.addEventListener('keydown', onKeyDown)
     return () => {
       document.body.style.overflow = prevOverflow
       document.removeEventListener('keydown', onKeyDown)
     }
-  }, [isTermsModalOpen])
+  }, [isBirthDateModalOpen, isTermsModalOpen])
 
   useEffect(() => {
     if (isTermsModalOpen) termsModalCloseRef.current?.focus()
@@ -120,9 +174,11 @@ export function PersonalDetailsPage() {
                   name="idNumber"
                   type="text"
                   inputMode="numeric"
+                  maxLength={9}
+                  pattern="[0-9]{9}"
                   placeholder="הקלידו מספר תעודת זהות"
                   value={form.idNumber}
-                  onChange={(e) => updateField('idNumber', e.target.value)}
+                  onChange={(e) => handleIdNumberChange(e.target.value)}
                 />
               </div>
               <div className="field-group">
@@ -155,11 +211,11 @@ export function PersonalDetailsPage() {
                   id="birthDate"
                   name="birthDate"
                   type="text"
-                  inputMode="numeric"
-                  maxLength={10}
+                  className="birth-date-input"
                   placeholder="dd/mm/yyyy"
-                  value={form.birthDate}
-                  onChange={(e) => updateField('birthDate', formatBirthDate(e.target.value))}
+                  value={formatBirthDateForDisplay(form.birthDate)}
+                  readOnly
+                  onClick={openBirthDateModal}
                 />
               </div>
 
@@ -233,6 +289,72 @@ export function PersonalDetailsPage() {
               <div className="terms-modal-body">
                 <p className="terms-modal-placeholder">
                 </p>
+              </div>
+            </div>
+          </div>,
+          document.body,
+        )}
+
+      {isBirthDateModalOpen &&
+        createPortal(
+          <div className="birthdate-modal-root" role="dialog" aria-modal="true" aria-labelledby="birthdate-title">
+            <div className="birthdate-modal-backdrop" role="presentation" onClick={closeBirthDateModal} />
+            <div className="birthdate-modal-panel" dir="rtl">
+              <h2 id="birthdate-title" className="birthdate-modal-title">
+                בחירת תאריך לידה
+              </h2>
+              <div className="birthdate-calendar-header">
+                <button
+                  type="button"
+                  className="birthdate-nav-btn"
+                  aria-label="חודש הבא"
+                  onClick={() => changeBirthDateMonth(1)}
+                >
+                  ‹
+                </button>
+                <p className="birthdate-month-label">{monthLabel}</p>
+                <button
+                  type="button"
+                  className="birthdate-nav-btn"
+                  aria-label="חודש קודם"
+                  onClick={() => changeBirthDateMonth(-1)}
+                >
+                  ›
+                </button>
+              </div>
+              <div className="birthdate-weekdays" aria-hidden="true">
+                {['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'].map((weekday) => (
+                  <span key={weekday} className="birthdate-weekday">
+                    {weekday}
+                  </span>
+                ))}
+              </div>
+              <div className="birthdate-calendar-grid">
+                {leadingEmptyCells.map((_, index) => (
+                  <span key={`empty-${index}`} className="birthdate-empty-cell" />
+                ))}
+                {calendarDays.map((calendarDay) => {
+                  const isSelected = selectedBirthDate?.toISOString().slice(0, 10) === calendarDay.iso
+                  return (
+                    <button
+                      key={calendarDay.iso}
+                      type="button"
+                      className={`birthdate-day-btn${isSelected ? ' is-selected' : ''}`}
+                      onClick={() => handleBirthDateSelect(calendarDay.date)}
+                    >
+                      {calendarDay.day}
+                    </button>
+                  )
+                })}
+              </div>
+              <div className="birthdate-modal-actions">
+                <button
+                  type="button"
+                  className="birthdate-modal-btn birthdate-modal-btn--ghost"
+                  onClick={closeBirthDateModal}
+                >
+                  ביטול
+                </button>
               </div>
             </div>
           </div>,

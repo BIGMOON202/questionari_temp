@@ -167,6 +167,135 @@
   box-shadow: 0 0 0 3px rgba(68, 63, 229, 0.12);
 }
 
+.birth-date-input {
+  direction: rtl;
+  text-align: right;
+  cursor: pointer;
+}
+
+.birthdate-modal-root {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.birthdate-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.birthdate-modal-panel {
+  position: relative;
+  z-index: 1;
+  width: min(380px, 100%);
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.2);
+  padding: 20px 16px 16px;
+}
+
+.birthdate-modal-title {
+  margin: 0 0 16px;
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+  color: #1b1b24;
+}
+
+.birthdate-calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.birthdate-nav-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 0;
+  background: #f5f2ff;
+  color: #443fe5;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.birthdate-month-label {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1b1b24;
+}
+
+.birthdate-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  margin-bottom: 8px;
+}
+
+.birthdate-weekday {
+  text-align: center;
+  color: #7a7b8a;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.birthdate-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.birthdate-empty-cell {
+  display: block;
+  height: 38px;
+}
+
+.birthdate-day-btn {
+  height: 38px;
+  border-radius: 10px;
+  border: 0;
+  background: #f7f7fc;
+  color: #1b1b24;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.birthdate-day-btn.is-selected {
+  background: #443fe5;
+  color: #fff;
+}
+
+.birthdate-modal-actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+}
+
+.birthdate-modal-btn {
+  flex: 1;
+  height: 44px;
+  border-radius: 999px;
+  border: 0;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.birthdate-modal-btn--ghost {
+  background: #ececff;
+  color: #443fe5;
+}
+
 .terms-row {
   display: flex;
   flex-direction: row;
