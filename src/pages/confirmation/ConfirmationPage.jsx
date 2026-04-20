@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { storeScenarios } from '../../config/storeScenarios.js'
-import logoImage from '../../assets/images/logo1.png'
+import { useBrand } from '../../context/BrandContext.jsx'
 import playgroundLogo from '../../assets/images/playground.png'
 import successMarkIcon from '../../assets/images/success_mark.png'
 import timerRightIcon from '../../assets/images/timer_right.png'
@@ -27,7 +26,8 @@ function formatDuration(seconds) {
 }
 
 export function ConfirmationPage() {
-  const activeScenario = storeScenarios.superPharm
+  const brand = useBrand()
+  const { logo, campaignName } = brand
   const { elapsedSeconds, refNumber } = useMemo(() => getSubmissionData(), [])
   const formattedDuration = useMemo(() => formatDuration(elapsedSeconds), [elapsedSeconds])
   const [showCelebration, setShowCelebration] = useState(true)
@@ -57,8 +57,8 @@ export function ConfirmationPage() {
           <header className="confirmation-header">
             <img
               className="confirmation-header-logo"
-              src={logoImage}
-              alt={`לוגו מבצע ${activeScenario.campaignName}`}
+              src={logo}
+              alt={`לוגו מבצע ${campaignName}`}
             />
           </header>
 
@@ -73,7 +73,7 @@ export function ConfirmationPage() {
             <p className="confirmation-note">
               זוכים יעודכנו בסוף משך פעילות התחרות
               <br />
-              שאלות/פניות :email@mail.com
+              שאלות/פניות: Henkelsoad@gmail.com
             </p>
 
             <div className="confirmation-info-list">
@@ -85,7 +85,7 @@ export function ConfirmationPage() {
                   aria-hidden="true"
                 />
                 <div className="confirmation-info-text">
-                  <div className="confirmation-info-label confirmation-info-label--time">זמן ענייה</div>
+                  <div className="confirmation-info-label confirmation-info-label--time">זמן מענה</div>
                   <div className="confirmation-info-value">{formattedDuration}</div>
                 </div>
                 <img
@@ -104,7 +104,7 @@ export function ConfirmationPage() {
                   aria-hidden="true"
                 />
                 <div className="confirmation-info-text">
-                  <div className="confirmation-info-label confirmation-info-label--number">מספר ספק</div>
+                  <div className="confirmation-info-label confirmation-info-label--number">מספר טופס</div>
                   <div className="confirmation-info-value">#{refNumber}</div>
                 </div>
                 <img

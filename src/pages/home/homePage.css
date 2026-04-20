@@ -34,15 +34,20 @@
   min-height: 0;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  padding-bottom: 16px;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-.mobile-home-bottom {
+.home-readiness-anchor {
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Flow space so the fixed FAB aligns between “איך משתתפים” and the legal line when you scroll. */
+.home-fab-slot {
   flex-shrink: 0;
-  padding-inline: 16px;
-  padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
-  padding-top: 8px;
-  background: #fff;
+  min-height: calc(68px + 44px);
+  pointer-events: none;
 }
 
 .top-logo {
@@ -238,7 +243,7 @@
 .cta {
   width: min(342px, 100%);
   height: 68px;
-  margin: 20px auto 0;
+  margin: 0 auto;
   border: 0;
   border-radius: 999px;
   box-shadow:
@@ -253,10 +258,49 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition:
+    opacity 200ms ease,
+    filter 200ms ease,
+    box-shadow 200ms ease,
+    transform 140ms ease;
+}
+
+.cta--pending {
+  opacity: 0.42;
+  filter: grayscale(0.35) brightness(1.05);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.home-fab.cta--pending {
+  box-shadow: 0 4px 14px rgba(27, 27, 36, 0.12);
+}
+
+.cta--pending:hover {
+  filter: grayscale(0.35) brightness(1.05);
+}
+
+.cta:disabled {
+  pointer-events: none;
+}
+
+.home-fab {
+  position: fixed;
+  z-index: 1000;
+  bottom: calc(130px + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(342px, calc(100vw - 32px));
+  margin: 0;
+  box-shadow:
+    0 8px 10px -6px #c7d2fe,
+    0 20px 25px -5px #c7d2fe,
+    0 12px 40px rgba(27, 27, 36, 0.18);
 }
 
 .page-footer {
-  margin-top: 14px;
+  margin-top: 0;
+  margin-bottom: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -281,4 +325,6 @@
   display: block;
   height: 39px;
   width: auto;
+  margin-bottom: 0;
+  padding-bottom: 0;
 }

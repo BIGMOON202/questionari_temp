@@ -1,34 +1,46 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
-import { storeScenarios } from '../../config/storeScenarios.js'
-import logoImage from '../../assets/images/logo1.png'
+import { useBrand } from '../../context/BrandContext.jsx'
 import playgroundLogo from '../../assets/images/playground.png'
 import './personalDetailsPage.css'
 
-const initialForm = {
-  fullName: '',
-  idNumber: '',
-  phone: '',
-  email: '',
-  birthDate: '',
+function buildInitialForm(showNetworkSelect) {
+  return {
+    fullName: '',
+    idNumber: '',
+    phone: '',
+    email: '',
+    birthDate: '',
+    ...(showNetworkSelect ? { network: '' } : {}),
+  }
 }
 
 export function PersonalDetailsPage() {
   const navigate = useNavigate()
-  const activeScenario = storeScenarios.superPharm
-  const [form, setForm] = useState(initialForm)
+  const brand = useBrand()
+  const { logo, campaignName, personal } = brand
+  const showNetworkSelect = personal.showNetworkSelect
+  const networkOptions = personal.networkOptions ?? []
+
+  const [form, setForm] = useState(() => buildInitialForm(showNetworkSelect))
   const [acceptedTerms, setAcceptedTerms] = useState(false)
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false)
   const [isBirthDateModalOpen, setIsBirthDateModalOpen] = useState(false)
+  const [isNetworkDropdownOpen, setIsNetworkDropdownOpen] = useState(false)
   const [birthDateView, setBirthDateView] = useState(() => {
     const today = new Date()
     return { month: today.getMonth(), year: today.getFullYear() }
   })
   const termsModalCloseRef = useRef(null)
-  const isFormFilled = Object.values(form).every((value) => value.trim() !== '')
+  const networkSelectRef = useRef(null)
+
+  const isFormFilled = useMemo(() => {
+    const requiredStrings = Object.entries(form).filter(([, v]) => typeof v === 'string')
+    return requiredStrings.every(([, value]) => value.trim() !== '')
+  }, [form])
+
   const canProceed = isFormFilled && acceptedTerms
-  const selectedBirthDate = form.birthDate ? new Date(form.birthDate) : null
 
   function updateField(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }))
@@ -48,7 +60,7 @@ export function PersonalDetailsPage() {
 
   function openBirthDateModal() {
     if (form.birthDate) {
-      const selectedDate = new Date(form.birthDate)
+      const selectedDate = new Date(`${form.birthDate}T12:00:00`)
       setBirthDateView({ month: selectedDate.getMonth(), year: selectedDate.getFullYear() })
     } else {
       const today = new Date()
@@ -83,9 +95,25 @@ export function PersonalDetailsPage() {
     const iso = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
     return { day, date, iso }
   })
-  const monthLabel = new Intl.DateTimeFormat('he-IL', { month: 'long', year: 'numeric' }).format(
-    new Date(birthDateView.year, birthDateView.month, 1),
+  const monthNames = useMemo(
+    () =>
+      Array.from({ length: 12 }, (_, month) =>
+        new Intl.DateTimeFormat('he-IL', { month: 'long' }).format(new Date(2020, month, 1)),
+      ),
+    [],
   )
+  const yearOptions = useMemo(() => {
+    const currentYear = new Date().getFullYear()
+    return Array.from({ length: 101 }, (_, i) => currentYear - i)
+  }, [])
+
+  function setBirthDateMonth(month) {
+    setBirthDateView((prev) => ({ ...prev, month }))
+  }
+
+  function setBirthDateYear(year) {
+    setBirthDateView((prev) => ({ ...prev, year }))
+  }
 
   function closeTermsModal() {
     setIsTermsModalOpen(false)
@@ -95,12 +123,13 @@ export function PersonalDetailsPage() {
     if (!canProceed) return
     sessionStorage.setItem('personalDetails', JSON.stringify(form))
     sessionStorage.setItem('acceptedTerms', 'true')
+    sessionStorage.setItem('submissionBrand', brand.slug)
     sessionStorage.setItem('submissionStartAt', String(Date.now()))
     sessionStorage.removeItem('submissionElapsedSeconds')
     sessionStorage.removeItem('submissionRefNumber')
     sessionStorage.removeItem('invoicePublicUrl')
     sessionStorage.removeItem('invoiceStoragePath')
-    navigate('/questions')
+    navigate('../questions')
   }
 
   useEffect(() => {
@@ -121,6 +150,24 @@ export function PersonalDetailsPage() {
   }, [isBirthDateModalOpen, isTermsModalOpen])
 
   useEffect(() => {
+    if (!isNetworkDropdownOpen) return
+    function onPointerDown(e) {
+      if (networkSelectRef.current && !networkSelectRef.current.contains(e.target)) {
+        setIsNetworkDropdownOpen(false)
+      }
+    }
+    function onKeyDown(e) {
+      if (e.key === 'Escape') setIsNetworkDropdownOpen(false)
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown)
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [isNetworkDropdownOpen])
+
+  useEffect(() => {
     if (isTermsModalOpen) termsModalCloseRef.current?.focus()
   }, [isTermsModalOpen])
 
@@ -129,11 +176,7 @@ export function PersonalDetailsPage() {
       <section className="personal-card">
         <div className="personal-scroll">
           <header className="personal-header">
-            <img
-              className="personal-header-logo"
-              src={logoImage}
-              alt={`לוגו מבצע ${activeScenario.campaignName}`}
-            />
+            <img className="personal-header-logo" src={logo} alt={`לוגו מבצע ${campaignName}`} />
           </header>
 
           <div className="personal-content">
@@ -219,38 +262,146 @@ export function PersonalDetailsPage() {
                 />
               </div>
 
+              {showNetworkSelect ? (
+                <div className="field-group field-group--network">
+                  <label id="network-field-label" htmlFor="network-select-trigger-btn">
+                    רשת
+                  </label>
+                  <div
+                    ref={networkSelectRef}
+                    className={`network-select${isNetworkDropdownOpen ? ' is-open' : ''}`}
+                  >
+                    {isNetworkDropdownOpen ? (
+                      <div className="network-select-panel" dir="rtl" aria-labelledby="network-field-label">
+                        <div className="network-select-panel-header">
+                          <button
+                            type="button"
+                            className="network-select-chevron-toggle"
+                            aria-label="סגירת רשימה"
+                            onClick={() => setIsNetworkDropdownOpen(false)}
+                          >
+                            <svg
+                              className="network-select-chevron network-select-chevron--open"
+                              width="14"
+                              height="14"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                              aria-hidden
+                            >
+                              <path
+                                d="M6 9l6 6 6-6"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                        <div className="network-select-options">
+                          {networkOptions.map((opt) => (
+                            <button
+                              key={opt.id}
+                              type="button"
+                              className={`network-select-option${form.network === opt.id ? ' is-selected' : ''}`}
+                              onClick={() => {
+                                updateField('network', opt.id)
+                                setIsNetworkDropdownOpen(false)
+                              }}
+                            >
+                              {opt.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      <button
+                        id="network-select-trigger-btn"
+                        type="button"
+                        className="network-select-trigger"
+                        aria-haspopup="listbox"
+                        aria-expanded={isNetworkDropdownOpen}
+                        aria-labelledby="network-field-label"
+                        onClick={() => setIsNetworkDropdownOpen(true)}
+                      >
+                        <span
+                          className={`network-select-value${form.network ? '' : ' network-select-value--placeholder'}`}
+                        >
+                          {form.network
+                            ? networkOptions.find((o) => o.id === form.network)?.label ?? 'בחר/י'
+                            : 'בחר/י'}
+                        </span>
+                        <svg
+                          className="network-select-chevron network-select-chevron--closed"
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          aria-hidden
+                        >
+                          <path
+                            d="M15 18l-6-6 6-6"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ) : null}
+
               <label className="terms-row">
                 <input
                   type="checkbox"
                   checked={acceptedTerms}
                   onChange={(e) => setAcceptedTerms(e.target.checked)}
                 />
-                <span className="terms-text">
-                  אני מאשר/ת את{' '}
-                  <a
-                    href="#"
-                    className="terms-link"
-                    onClick={(e) => {
-                      e.preventDefault()
-                      e.stopPropagation()
-                      setIsTermsModalOpen(true)
-                    }}
-                  >
-                    תקנון התחרות
-                  </a>
-                </span>
+                {personal.termsVariant === 'ramiGoodPharm' ? (
+                  <span className="terms-text" dir="rtl">
+                    <a
+                      href="#"
+                      className="terms-link"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        setIsTermsModalOpen(true)
+                      }}
+                    >
+                      <span className="terms-link-first-row">
+                        <span className="terms-link-intro">אני מאשר/ת את </span>
+                        <span className="terms-link-line terms-link-line--inline">תקנון רמי לוי שיווק השקמה /</span>
+                      </span>
+                      <span className="terms-link-line terms-link-line--block">תקנון GOOD PHARM</span>
+                    </a>
+                  </span>
+                ) : (
+                  <span className="terms-text">
+                    אני מאשר/ת את{' '}
+                    <a
+                      href="#"
+                      className="terms-link"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        setIsTermsModalOpen(true)
+                      }}
+                    >
+                      תקנון התחרות
+                    </a>
+                  </span>
+                )}
               </label>
             </form>
           </div>
         </div>
 
         <div className="personal-bottom">
-          <button
-            type="button"
-            className="personal-cta"
-            disabled={!canProceed}
-            onClick={goNext}
-          >
+          <button type="button" className="personal-cta" disabled={!canProceed} onClick={goNext}>
             לשלב הבא
           </button>
           <footer className="personal-footer-brand">
@@ -268,11 +419,7 @@ export function PersonalDetailsPage() {
             aria-labelledby="terms-modal-title"
             dir="rtl"
           >
-            <div
-              className="terms-modal-backdrop"
-              role="presentation"
-              onClick={closeTermsModal}
-            />
+            <div className="terms-modal-backdrop" role="presentation" onClick={closeTermsModal} />
             <div className="terms-modal-panel">
               <button
                 ref={termsModalCloseRef}
@@ -284,11 +431,10 @@ export function PersonalDetailsPage() {
                 <span aria-hidden="true">×</span>
               </button>
               <h2 id="terms-modal-title" className="terms-modal-title">
-                תקנון אתר
+                תקנון התחרות
               </h2>
               <div className="terms-modal-body">
-                <p className="terms-modal-placeholder">
-                </p>
+                <p className="terms-modal-placeholder" />
               </div>
             </div>
           </div>,
@@ -312,7 +458,36 @@ export function PersonalDetailsPage() {
                 >
                   ‹
                 </button>
-                <p className="birthdate-month-label">{monthLabel}</p>
+                <div className="birthdate-picker-controls">
+                  <label className="birthdate-picker-label">
+                    <span className="birthdate-picker-label-text">חודש</span>
+                    <select
+                      className="birthdate-picker-select"
+                      value={birthDateView.month}
+                      onChange={(e) => setBirthDateMonth(Number(e.target.value))}
+                    >
+                      {monthNames.map((name, monthIndex) => (
+                        <option key={name} value={monthIndex}>
+                          {name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="birthdate-picker-label">
+                    <span className="birthdate-picker-label-text">שנה</span>
+                    <select
+                      className="birthdate-picker-select"
+                      value={birthDateView.year}
+                      onChange={(e) => setBirthDateYear(Number(e.target.value))}
+                    >
+                      {yearOptions.map((year) => (
+                        <option key={year} value={year}>
+                          {year}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
                 <button
                   type="button"
                   className="birthdate-nav-btn"
@@ -334,7 +509,7 @@ export function PersonalDetailsPage() {
                   <span key={`empty-${index}`} className="birthdate-empty-cell" />
                 ))}
                 {calendarDays.map((calendarDay) => {
-                  const isSelected = selectedBirthDate?.toISOString().slice(0, 10) === calendarDay.iso
+                  const isSelected = form.birthDate === calendarDay.iso
                   return (
                     <button
                       key={calendarDay.iso}

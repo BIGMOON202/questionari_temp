@@ -96,7 +96,7 @@ body {
   will-change: transform;
 }
 
-.cta:hover,
+.cta:hover:not(:disabled),
 .personal-cta:hover,
 .question-option:hover,
 .invoice-upload-button:hover,

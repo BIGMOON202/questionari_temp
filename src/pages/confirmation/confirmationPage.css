@@ -227,20 +227,34 @@
 }
 
 .confirmation-info-label {
+  font-family: 'Ploni AAA', Arial, sans-serif;
+  font-weight: 700;
+  font-style: normal;
   font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0;
+  text-align: right;
+  vertical-align: middle;
+  leading-trim: none;
   color: #464555;
 }
 
 .confirmation-info-value {
+  font-family: 'Ploni AAA', Arial, sans-serif;
   margin-top: 4px;
-  font-size: 16px;
-  line-height: 1.2;
   font-weight: 700;
-  color: #1b1b24;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0;
+  text-align: right;
+  vertical-align: middle;
+  leading-trim: none;
+  color: #1B1B24;
 }
 
 .confirmation-info-label--time {
-  font-weight: 400;
+  font-weight: 700;
 }
 
 .confirmation-info-label--number {

@@ -1,46 +1,13 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { storeScenarios } from '../../config/storeScenarios.js'
-import logoImage from '../../assets/images/logo1.png'
+import { useBrand } from '../../context/BrandContext.jsx'
 import playgroundLogo from '../../assets/images/playground.png'
 import './questionsPage.css'
 
 export function QuestionsPage() {
   const navigate = useNavigate()
-  const activeScenario = storeScenarios.superPharm
-
-  const questions = useMemo(
-    () => [
-      {
-        id: 'q1',
-        title: 'באיזו שנה הושק מותג סוד בישראל?',
-        options: ['1993', '1982', '1978', '2001'],
-      },
-      {
-        id: 'q2',
-        title: 'כמה כביסות משפחה ישראלית ממוצעת עושה בשבוע?',
-        options: ['1-2', '3-5', '6-10', 'יותר מ-10'],
-      },
-      {
-        id: 'q3',
-        title: 'איזה מהמותגים הבאים שייך גם להנקל?',
-        options: ['אלביב', 'פרוול', 'לנור', 'בדין'],
-        layout: 'grid',
-      },
-      {
-        id: 'q4',
-        title: 'איזה מוצר חדש הצטרף לאחרונה למשפחת סוד?',
-        options: ['סוד לניקוי כלים', 'סוד 3 ב-1', 'סוד 5 ב-1', 'סוד מרכך לבגדי ספורט'],
-      },
-      {
-        id: 'q5',
-        title: 'איזה שם של סוד מרכך מרוכז לא קיים?',
-        options: ['גולד', 'פרש סי', "ג'ונגל", 'בייבי'],
-        layout: 'grid',
-      },
-    ],
-    [],
-  )
+  const brand = useBrand()
+  const { questions, logo, campaignName } = brand
 
   const [activeIndex, setActiveIndex] = useState(0)
   const [answers, setAnswers] = useState({})
@@ -61,7 +28,7 @@ export function QuestionsPage() {
         const elapsedSeconds = Math.max(1, Math.round((Date.now() - startAt) / 1000))
         sessionStorage.setItem('submissionElapsedSeconds', String(elapsedSeconds))
       }
-      navigate('/invoice')
+      navigate('../invoice')
       return
     }
     setActiveIndex((prev) => Math.min(prev + 1, questions.length - 1))
@@ -74,11 +41,7 @@ export function QuestionsPage() {
       <section className="questions-card">
         <div className="questions-scroll">
           <header className="questions-header">
-            <img
-              className="questions-header-logo"
-              src={logoImage}
-              alt={`לוגו מבצע ${activeScenario.campaignName}`}
-            />
+            <img className="questions-header-logo" src={logo} alt={`לוגו מבצע ${campaignName}`} />
           </header>
 
           <div className="questions-content">
@@ -144,4 +107,3 @@ export function QuestionsPage() {
     </main>
   )
 }
-

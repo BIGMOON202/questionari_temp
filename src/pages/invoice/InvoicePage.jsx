@@ -1,16 +1,16 @@
 import { useRef, useState } from 'react'
-import { storeScenarios } from '../../config/storeScenarios.js'
 import { useNavigate } from 'react-router-dom'
-import logoImage from '../../assets/images/logo1.png'
+import { useBrand } from '../../context/BrandContext.jsx'
 import playgroundLogo from '../../assets/images/playground.png'
 import uploadIcon from '../../assets/images/upload_icon.png'
 import cameraIcon from '../../assets/images/camera.png'
-import { invoicesBucket, submissionsTable, supabase } from '../../lib/supabaseClient.js'
+import { invoicesBucket, supabase } from '../../lib/supabaseClient.js'
 import './invoicePage.css'
 
 export function InvoicePage() {
   const navigate = useNavigate()
-  const activeScenario = storeScenarios.superPharm
+  const brand = useBrand()
+  const { logo, campaignName, submissionsTable, slug: brandSlug, personal } = brand
   const [invoiceFile, setInvoiceFile] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
@@ -49,7 +49,7 @@ export function InvoicePage() {
       const referenceNumber = String(Math.floor(10000 + Math.random() * 90000))
 
       const fileExt = invoiceFile.name.split('.').pop() || 'jpg'
-      const filePath = `invoices/${Date.now()}-${referenceNumber}.${fileExt}`
+      const filePath = `invoices/${brandSlug}/${Date.now()}-${referenceNumber}.${fileExt}`
       const { error: uploadError } = await supabase.storage
         .from(invoicesBucket)
         .upload(filePath, invoiceFile, { cacheControl: '3600', upsert: false })
@@ -71,6 +71,9 @@ export function InvoicePage() {
         reference_number: referenceNumber,
         invoice_storage_path: filePath,
         invoice_public_url: invoicePublicUrl,
+        ...(personal.showNetworkSelect && personalDetails.network
+          ? { network: personalDetails.network }
+          : {}),
       }
 
       const { error: insertError } = await supabase.from(submissionsTable).insert([submissionPayload])
@@ -80,7 +83,7 @@ export function InvoicePage() {
       sessionStorage.setItem('invoicePublicUrl', invoicePublicUrl)
       sessionStorage.setItem('invoiceStoragePath', filePath)
 
-      navigate('/confirmation')
+      navigate('../confirmation')
     } catch (error) {
       setErrorMessage(error?.message || 'שמירת הטופס נכשלה, נסו שוב')
     } finally {
@@ -95,8 +98,8 @@ export function InvoicePage() {
           <header className="invoice-header">
             <img
               className="invoice-header-logo"
-              src={logoImage}
-              alt={`לוגו מבצע ${activeScenario.campaignName}`}
+              src={logo}
+              alt={`לוגו מבצע ${campaignName}`}
             />
           </header>
 
@@ -122,11 +125,11 @@ export function InvoicePage() {
 
             <section className="invoice-upload-box" aria-label="אזור העלאת חשבונית">
               <img className="invoice-upload-icon" src={uploadIcon} alt="" aria-hidden="true" />
-              <h2 className="invoice-upload-heading">העלו את חשבונית</h2>
+              <h2 className="invoice-upload-heading">העלו את צילום החשבונית</h2>
               <p className="invoice-upload-subtext">ודאו שהחשבונית ברורה וקריאה</p>
               <button type="button" className="invoice-upload-button" onClick={onPickInvoice}>
                 <img className="invoice-upload-button-icon" src={cameraIcon} alt="" aria-hidden="true" />
-                {invoiceFile ? 'החלפת קובץ' : 'צלמו את המוצר לבד'}
+                {invoiceFile ? 'החלפת קובץ' : 'צילום או בחירת קובץ'}
               </button>
               <input
                 ref={fileInputRef}
