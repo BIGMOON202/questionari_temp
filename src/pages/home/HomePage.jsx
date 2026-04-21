@@ -17,6 +17,7 @@ export function HomePage() {
   const scrollRef = useRef(null)
   const afterStepsRef = useRef(null)
   const [ctaReady, setCtaReady] = useState(false)
+  const [ctaInFinalPosition, setCtaInFinalPosition] = useState(false)
 
   const updateCtaReadiness = useCallback(() => {
     const scrollEl = scrollRef.current
@@ -25,6 +26,7 @@ export function HomePage() {
 
     if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       setCtaReady(true)
+      setCtaInFinalPosition(true)
       return
     }
 
@@ -32,6 +34,7 @@ export function HomePage() {
     const maxScroll = scrollHeight - clientHeight
     if (maxScroll <= 12) {
       setCtaReady(true)
+      setCtaInFinalPosition(true)
       return
     }
 
@@ -40,8 +43,10 @@ export function HomePage() {
     const progress = scrollTop / maxScroll
     const seenStepsBlock =
       anchorRect.top < scrollRect.bottom - 72 && anchorRect.bottom > scrollRect.top - 40
+    const nearPageEnd = maxScroll - scrollTop <= 140 || progress >= 0.84
 
     setCtaReady(seenStepsBlock || progress >= 0.34)
+    setCtaInFinalPosition(nearPageEnd)
   }, [])
 
   useEffect(() => {
@@ -60,7 +65,7 @@ export function HomePage() {
   const fab = createPortal(
     <button
       type="button"
-      className={`cta home-fab${ctaReady ? '' : ' cta--pending'}`}
+      className={`cta home-fab${ctaInFinalPosition ? ' home-fab--final' : ''}${ctaReady ? '' : ' cta--pending'}`}
       disabled={!ctaReady}
       onClick={() => navigate('personal')}
     >

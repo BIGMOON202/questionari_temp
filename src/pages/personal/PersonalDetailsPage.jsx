@@ -3,6 +3,10 @@ import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import { useBrand } from '../../context/BrandContext.jsx'
 import playgroundLogo from '../../assets/images/playground.png'
+import superpharmRegulationsPdf from '../../assets/Superpharm Fabric Softener Policy 2026.pdf'
+import ramiLevyRegulationsPdf from '../../assets/Rami Levy Regulations.pdf'
+import goodPharmRegulationsPdf from '../../assets/Good Pharm Regulations.pdf'
+import yochananofRegulationsPdf from '../../assets/Yohananoff Regulations.doc.pdf'
 import './personalDetailsPage.css'
 
 function buildInitialForm(showNetworkSelect) {
@@ -16,6 +20,35 @@ function buildInitialForm(showNetworkSelect) {
   }
 }
 
+const termsDocsByBrand = {
+  superpharm: {
+    default: {
+      title: 'תקנון התחרות',
+      src: superpharmRegulationsPdf,
+    },
+  },
+  ramilevygoodpharm: {
+    ramiLevy: {
+      title: 'תקנון רמי לוי שיווק השקמה',
+      src: ramiLevyRegulationsPdf,
+    },
+    goodPharm: {
+      title: 'תקנון GOOD PHARM',
+      src: goodPharmRegulationsPdf,
+    },
+    default: {
+      title: 'תקנון רמי לוי / GOOD PHARM',
+      src: ramiLevyRegulationsPdf,
+    },
+  },
+  yochananof: {
+    default: {
+      title: 'תקנון יוחננוף',
+      src: yochananofRegulationsPdf,
+    },
+  },
+}
+
 export function PersonalDetailsPage() {
   const navigate = useNavigate()
   const brand = useBrand()
@@ -26,6 +59,7 @@ export function PersonalDetailsPage() {
   const [form, setForm] = useState(() => buildInitialForm(showNetworkSelect))
   const [acceptedTerms, setAcceptedTerms] = useState(false)
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false)
+  const [activeTermsDoc, setActiveTermsDoc] = useState('default')
   const [isBirthDateModalOpen, setIsBirthDateModalOpen] = useState(false)
   const [isNetworkDropdownOpen, setIsNetworkDropdownOpen] = useState(false)
   const [birthDateView, setBirthDateView] = useState(() => {
@@ -41,6 +75,10 @@ export function PersonalDetailsPage() {
   }, [form])
 
   const canProceed = isFormFilled && acceptedTerms
+  const termsDocConfig =
+    termsDocsByBrand[brand.slug]?.[activeTermsDoc] ??
+    termsDocsByBrand[brand.slug]?.default ??
+    termsDocsByBrand.superpharm.default
 
   function updateField(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }))
@@ -119,6 +157,11 @@ export function PersonalDetailsPage() {
     setIsTermsModalOpen(false)
   }
 
+  function openTermsModal(docType = 'default') {
+    setActiveTermsDoc(docType)
+    setIsTermsModalOpen(true)
+  }
+
   function goNext() {
     if (!canProceed) return
     sessionStorage.setItem('personalDetails', JSON.stringify(form))
@@ -172,9 +215,10 @@ export function PersonalDetailsPage() {
   }, [isTermsModalOpen])
 
   return (
-    <main className="personal-page" dir="rtl">
-      <section className="personal-card">
-        <div className="personal-scroll">
+    <>
+      <main className="personal-page" dir="rtl">
+        <section className="personal-card">
+          <div className="personal-scroll">
           <header className="personal-header">
             <img className="personal-header-logo" src={logo} alt={`לוגו מבצע ${campaignName}`} />
           </header>
@@ -363,20 +407,29 @@ export function PersonalDetailsPage() {
                 />
                 {personal.termsVariant === 'ramiGoodPharm' ? (
                   <span className="terms-text" dir="rtl">
+                    <span className="terms-link-intro">אני מאשר/ת את </span>
                     <a
                       href="#"
-                      className="terms-link"
+                      className="terms-link terms-link-line terms-link-line--inline"
                       onClick={(e) => {
                         e.preventDefault()
                         e.stopPropagation()
-                        setIsTermsModalOpen(true)
+                        openTermsModal('ramiLevy')
                       }}
                     >
-                      <span className="terms-link-first-row">
-                        <span className="terms-link-intro">אני מאשר/ת את </span>
-                        <span className="terms-link-line terms-link-line--inline">תקנון רמי לוי שיווק השקמה /</span>
-                      </span>
-                      <span className="terms-link-line terms-link-line--block">תקנון GOOD PHARM</span>
+                      תקנון רמי לוי שיווק השקמה
+                    </a>
+                    <span aria-hidden="true"> / </span>
+                    <a
+                      href="#"
+                      className="terms-link terms-link-line terms-link-line--block"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        openTermsModal('goodPharm')
+                      }}
+                    >
+                      תקנון GOOD PHARM
                     </a>
                   </span>
                 ) : (
@@ -388,7 +441,7 @@ export function PersonalDetailsPage() {
                       onClick={(e) => {
                         e.preventDefault()
                         e.stopPropagation()
-                        setIsTermsModalOpen(true)
+                        openTermsModal('default')
                       }}
                     >
                       תקנון התחרות
@@ -397,144 +450,162 @@ export function PersonalDetailsPage() {
                 )}
               </label>
             </form>
+
+            <div className="personal-fab-slot" aria-hidden />
+
+            <footer className="personal-footer-brand">
+              <img src={playgroundLogo} alt="Playground" className="personal-playground-logo" />
+            </footer>
           </div>
-        </div>
+          </div>
+        </section>
 
-        <div className="personal-bottom">
-          <button type="button" className="personal-cta" disabled={!canProceed} onClick={goNext}>
-            לשלב הבא
-          </button>
-          <footer className="personal-footer-brand">
-            <img src={playgroundLogo} alt="Playground" className="personal-playground-logo" />
-          </footer>
-        </div>
-      </section>
-
-      {isTermsModalOpen &&
-        createPortal(
-          <div
-            className="terms-modal-root"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="terms-modal-title"
-            dir="rtl"
-          >
-            <div className="terms-modal-backdrop" role="presentation" onClick={closeTermsModal} />
-            <div className="terms-modal-panel">
-              <button
-                ref={termsModalCloseRef}
-                type="button"
-                className="terms-modal-close"
-                aria-label="סגירה"
-                onClick={closeTermsModal}
-              >
-                <span aria-hidden="true">×</span>
-              </button>
-              <h2 id="terms-modal-title" className="terms-modal-title">
-                תקנון התחרות
-              </h2>
-              <div className="terms-modal-body">
-                <p className="terms-modal-placeholder" />
-              </div>
-            </div>
-          </div>,
-          document.body,
-        )}
-
-      {isBirthDateModalOpen &&
-        createPortal(
-          <div className="birthdate-modal-root" role="dialog" aria-modal="true" aria-labelledby="birthdate-title">
-            <div className="birthdate-modal-backdrop" role="presentation" onClick={closeBirthDateModal} />
-            <div className="birthdate-modal-panel" dir="rtl">
-              <h2 id="birthdate-title" className="birthdate-modal-title">
-                בחירת תאריך לידה
-              </h2>
-              <div className="birthdate-calendar-header">
+        {isTermsModalOpen &&
+          createPortal(
+            <div
+              className="terms-modal-root"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="terms-modal-title"
+              dir="rtl"
+            >
+              <div className="terms-modal-backdrop" role="presentation" onClick={closeTermsModal} />
+              <div className="terms-modal-panel">
                 <button
+                  ref={termsModalCloseRef}
                   type="button"
-                  className="birthdate-nav-btn"
-                  aria-label="חודש הבא"
-                  onClick={() => changeBirthDateMonth(1)}
+                  className="terms-modal-close"
+                  aria-label="סגירה"
+                  onClick={closeTermsModal}
                 >
-                  ‹
+                  <span aria-hidden="true">×</span>
                 </button>
-                <div className="birthdate-picker-controls">
-                  <label className="birthdate-picker-label">
-                    <span className="birthdate-picker-label-text">חודש</span>
-                    <select
-                      className="birthdate-picker-select"
-                      value={birthDateView.month}
-                      onChange={(e) => setBirthDateMonth(Number(e.target.value))}
-                    >
-                      {monthNames.map((name, monthIndex) => (
-                        <option key={name} value={monthIndex}>
-                          {name}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label className="birthdate-picker-label">
-                    <span className="birthdate-picker-label-text">שנה</span>
-                    <select
-                      className="birthdate-picker-select"
-                      value={birthDateView.year}
-                      onChange={(e) => setBirthDateYear(Number(e.target.value))}
-                    >
-                      {yearOptions.map((year) => (
-                        <option key={year} value={year}>
-                          {year}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
+                <h2 id="terms-modal-title" className="terms-modal-title">
+                  תקנון התחרות
+                </h2>
+                <div className="terms-modal-body">
+                  <a
+                    className="terms-modal-download-btn"
+                    href={termsDocConfig.src}
+                    target="_blank"
+                    rel="noreferrer"
+                    download
+                  >
+                    הורדת התקנון
+                  </a>
+                  <iframe
+                    className="terms-modal-pdf"
+                    title={termsDocConfig.title}
+                    src={`${termsDocConfig.src}#toolbar=0&navpanes=0&scrollbar=1`}
+                    loading="lazy"
+                  />
                 </div>
-                <button
-                  type="button"
-                  className="birthdate-nav-btn"
-                  aria-label="חודש קודם"
-                  onClick={() => changeBirthDateMonth(-1)}
-                >
-                  ›
-                </button>
               </div>
-              <div className="birthdate-weekdays" aria-hidden="true">
-                {['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'].map((weekday) => (
-                  <span key={weekday} className="birthdate-weekday">
-                    {weekday}
-                  </span>
-                ))}
+            </div>,
+            document.body,
+          )}
+
+        {isBirthDateModalOpen &&
+          createPortal(
+            <div className="birthdate-modal-root" role="dialog" aria-modal="true" aria-labelledby="birthdate-title">
+              <div className="birthdate-modal-backdrop" role="presentation" onClick={closeBirthDateModal} />
+              <div className="birthdate-modal-panel" dir="rtl">
+                <h2 id="birthdate-title" className="birthdate-modal-title">
+                  בחירת תאריך לידה
+                </h2>
+                <div className="birthdate-calendar-header">
+                  <button
+                    type="button"
+                    className="birthdate-nav-btn"
+                    aria-label="חודש הבא"
+                    onClick={() => changeBirthDateMonth(1)}
+                  >
+                    ‹
+                  </button>
+                  <div className="birthdate-picker-controls">
+                    <label className="birthdate-picker-label">
+                      <span className="birthdate-picker-label-text">חודש</span>
+                      <select
+                        className="birthdate-picker-select"
+                        value={birthDateView.month}
+                        onChange={(e) => setBirthDateMonth(Number(e.target.value))}
+                      >
+                        {monthNames.map((name, monthIndex) => (
+                          <option key={name} value={monthIndex}>
+                            {name}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <label className="birthdate-picker-label">
+                      <span className="birthdate-picker-label-text">שנה</span>
+                      <select
+                        className="birthdate-picker-select"
+                        value={birthDateView.year}
+                        onChange={(e) => setBirthDateYear(Number(e.target.value))}
+                      >
+                        {yearOptions.map((year) => (
+                          <option key={year} value={year}>
+                            {year}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  </div>
+                  <button
+                    type="button"
+                    className="birthdate-nav-btn"
+                    aria-label="חודש קודם"
+                    onClick={() => changeBirthDateMonth(-1)}
+                  >
+                    ›
+                  </button>
+                </div>
+                <div className="birthdate-weekdays" aria-hidden="true">
+                  {['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'].map((weekday) => (
+                    <span key={weekday} className="birthdate-weekday">
+                      {weekday}
+                    </span>
+                  ))}
+                </div>
+                <div className="birthdate-calendar-grid">
+                  {leadingEmptyCells.map((_, index) => (
+                    <span key={`empty-${index}`} className="birthdate-empty-cell" />
+                  ))}
+                  {calendarDays.map((calendarDay) => {
+                    const isSelected = form.birthDate === calendarDay.iso
+                    return (
+                      <button
+                        key={calendarDay.iso}
+                        type="button"
+                        className={`birthdate-day-btn${isSelected ? ' is-selected' : ''}`}
+                        onClick={() => handleBirthDateSelect(calendarDay.date)}
+                      >
+                        {calendarDay.day}
+                      </button>
+                    )
+                  })}
+                </div>
+                <div className="birthdate-modal-actions">
+                  <button
+                    type="button"
+                    className="birthdate-modal-btn birthdate-modal-btn--ghost"
+                    onClick={closeBirthDateModal}
+                  >
+                    ביטול
+                  </button>
+                </div>
               </div>
-              <div className="birthdate-calendar-grid">
-                {leadingEmptyCells.map((_, index) => (
-                  <span key={`empty-${index}`} className="birthdate-empty-cell" />
-                ))}
-                {calendarDays.map((calendarDay) => {
-                  const isSelected = form.birthDate === calendarDay.iso
-                  return (
-                    <button
-                      key={calendarDay.iso}
-                      type="button"
-                      className={`birthdate-day-btn${isSelected ? ' is-selected' : ''}`}
-                      onClick={() => handleBirthDateSelect(calendarDay.date)}
-                    >
-                      {calendarDay.day}
-                    </button>
-                  )
-                })}
-              </div>
-              <div className="birthdate-modal-actions">
-                <button
-                  type="button"
-                  className="birthdate-modal-btn birthdate-modal-btn--ghost"
-                  onClick={closeBirthDateModal}
-                >
-                  ביטול
-                </button>
-              </div>
-            </div>
-          </div>,
-          document.body,
-        )}
-    </main>
+            </div>,
+            document.body,
+          )}
+      </main>
+      {createPortal(
+        <button type="button" className="personal-cta personal-fab" disabled={!canProceed} onClick={goNext}>
+          לשלב הבא
+        </button>,
+        document.body,
+      )}
+    </>
   )
 }
