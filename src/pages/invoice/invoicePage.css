@@ -27,6 +27,7 @@
   min-height: 0;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 .invoice-header-logo {
@@ -192,13 +193,6 @@
   color: #c62828;
 }
 
-.invoice-bottom {
-  flex-shrink: 0;
-  padding-inline: 16px;
-  padding-top: 10px;
-  padding-bottom: calc(22px + env(safe-area-inset-bottom, 0px));
-}
-
 .invoice-cta {
   width: min(342px, 100%);
   height: 68px;
@@ -223,7 +217,7 @@
 }
 
 .invoice-footer-brand {
-  margin-top: 16px;
+  margin-top: 0;
   display: flex;
   justify-content: center;
 }
@@ -232,5 +226,76 @@
   height: 39px;
   width: auto;
   opacity: 0.85;
+}
+
+.invoice-fab-slot {
+  flex-shrink: 0;
+  min-height: calc(68px + 44px);
+  pointer-events: none;
+}
+
+.invoice-fab {
+  position: fixed;
+  z-index: 1000;
+  bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(342px, calc(100vw - 32px));
+  margin: 0;
+}
+
+.invoice-fab:active {
+  animation: none;
+  transform: translateX(-50%) scale(0.98);
+}
+
+.invoice-picker-root {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 12px calc(12px + env(safe-area-inset-bottom, 0px));
+  box-sizing: border-box;
+}
+
+.invoice-picker-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.invoice-picker-panel {
+  position: relative;
+  z-index: 1;
+  width: min(420px, 100%);
+  background: #fff;
+  border-radius: 18px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.invoice-picker-option,
+.invoice-picker-cancel {
+  height: 48px;
+  border: 0;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.invoice-picker-option {
+  background: #f5f2ff;
+  color: #1b1b24;
+}
+
+.invoice-picker-cancel {
+  background: #ececff;
+  color: #443fe5;
 }
 

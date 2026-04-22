@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import { useBrand } from '../../context/BrandContext.jsx'
 import playgroundLogo from '../../assets/images/playground.png'
@@ -92,18 +93,21 @@ export function QuestionsPage() {
                 })}
               </div>
             </section>
+
+            <div className="questions-fab-slot" aria-hidden />
+
+            <footer className="questions-footer-brand">
+              <img src={playgroundLogo} alt="Playground" className="questions-playground-logo" />
+            </footer>
           </div>
         </div>
-
-        <div className="questions-bottom">
-          <button type="button" className="personal-cta" disabled={!selected} onClick={goNext}>
-            לשלב הבא
-          </button>
-          <footer className="personal-footer-brand">
-            <img src={playgroundLogo} alt="Playground" className="personal-playground-logo" />
-          </footer>
-        </div>
       </section>
+      {createPortal(
+        <button type="button" className="personal-cta questions-fab" disabled={!selected} onClick={goNext}>
+          לשלב הבא
+        </button>,
+        document.body,
+      )}
     </main>
   )
 }

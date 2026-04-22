@@ -1,4 +1,5 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import { useBrand } from '../../context/BrandContext.jsx'
 import playgroundLogo from '../../assets/images/playground.png'
@@ -14,9 +15,27 @@ export function InvoicePage() {
   const [invoiceFile, setInvoiceFile] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
+  const [isPickerOpen, setIsPickerOpen] = useState(false)
+  const galleryInputRef = useRef(null)
+  const cameraInputRef = useRef(null)
   const fileInputRef = useRef(null)
 
   function onPickInvoice() {
+    setIsPickerOpen(true)
+  }
+
+  function pickFromGallery() {
+    setIsPickerOpen(false)
+    galleryInputRef.current?.click()
+  }
+
+  function pickFromCamera() {
+    setIsPickerOpen(false)
+    cameraInputRef.current?.click()
+  }
+
+  function pickFromFiles() {
+    setIsPickerOpen(false)
     fileInputRef.current?.click()
   }
 
@@ -25,6 +44,20 @@ export function InvoicePage() {
     setInvoiceFile(selected)
     setErrorMessage('')
   }
+
+  useEffect(() => {
+    if (!isPickerOpen) return
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    function onKeyDown(e) {
+      if (e.key === 'Escape') setIsPickerOpen(false)
+    }
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.body.style.overflow = prevOverflow
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [isPickerOpen])
 
   async function handleFinish() {
     if (!invoiceFile) {
@@ -132,28 +165,66 @@ export function InvoicePage() {
                 {invoiceFile ? 'החלפת קובץ' : 'צילום או בחירת קובץ'}
               </button>
               <input
-                ref={fileInputRef}
+                ref={galleryInputRef}
+                className="invoice-file-input"
+                type="file"
+                accept="image/*"
+                onChange={onFileChange}
+              />
+              <input
+                ref={cameraInputRef}
                 className="invoice-file-input"
                 type="file"
                 accept="image/*"
                 capture="environment"
                 onChange={onFileChange}
               />
+              <input
+                ref={fileInputRef}
+                className="invoice-file-input"
+                type="file"
+                accept="image/*,application/pdf"
+                onChange={onFileChange}
+              />
               {invoiceFile && <p className="invoice-file-name">{invoiceFile.name}</p>}
               {errorMessage && <p className="invoice-error">{errorMessage}</p>}
             </section>
+
+            <div className="invoice-fab-slot" aria-hidden />
+
+            <footer className="invoice-footer-brand">
+              <img src={playgroundLogo} alt="Playground" className="invoice-playground-logo" />
+            </footer>
           </div>
         </div>
-
-        <div className="invoice-bottom">
-          <button type="button" className="invoice-cta" onClick={handleFinish} disabled={isSubmitting}>
-            {isSubmitting ? 'שולח...' : 'סיום'}
-          </button>
-          <footer className="invoice-footer-brand">
-            <img src={playgroundLogo} alt="Playground" className="invoice-playground-logo" />
-          </footer>
-        </div>
       </section>
+      {createPortal(
+        <button type="button" className="invoice-cta invoice-fab" onClick={handleFinish} disabled={isSubmitting}>
+          {isSubmitting ? 'שולח...' : 'סיום'}
+        </button>,
+        document.body,
+      )}
+      {isPickerOpen &&
+        createPortal(
+          <div className="invoice-picker-root" role="dialog" aria-modal="true" aria-label="בחירת מקור לחשבונית">
+            <div className="invoice-picker-backdrop" role="presentation" onClick={() => setIsPickerOpen(false)} />
+            <div className="invoice-picker-panel" dir="rtl">
+              <button type="button" className="invoice-picker-option" onClick={pickFromGallery}>
+                Photo Library
+              </button>
+              <button type="button" className="invoice-picker-option" onClick={pickFromCamera}>
+                Take Photo
+              </button>
+              <button type="button" className="invoice-picker-option" onClick={pickFromFiles}>
+                Choose File
+              </button>
+              <button type="button" className="invoice-picker-cancel" onClick={() => setIsPickerOpen(false)}>
+                ביטול
+              </button>
+            </div>
+          </div>,
+          document.body,
+        )}
     </main>
   )
 }
