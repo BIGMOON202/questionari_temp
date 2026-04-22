@@ -27,7 +27,8 @@
   min-height: 0;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+  /* Clearance so floating CTA + answers are not covered */
+  padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
 }
 
 .personal-header {
@@ -597,16 +598,16 @@
   box-shadow: none;
 }
 
-.personal-footer-brand {
-  margin-top: 0;
-  display: flex;
-  justify-content: center;
-}
-
 .personal-fab-slot {
   flex-shrink: 0;
-  min-height: calc(68px + 44px);
+  min-height: calc(68px + 32px);
   pointer-events: none;
+}
+
+.personal-footer-brand {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 .personal-playground-logo {
@@ -618,7 +619,7 @@
 .personal-fab {
   position: fixed;
   z-index: 1000;
-  bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
   left: 50%;
   transform: translateX(-50%);
   width: min(342px, calc(100vw - 32px));
@@ -655,6 +656,7 @@
   z-index: 1;
   width: min(90vw, 100%);
   max-width: 520px;
+  min-height: 0;
   height: min(85vh, 100%);
   max-height: min(85vh, calc(100dvh - 32px));
   background: #fff;
@@ -698,19 +700,25 @@
   margin: 0;
   padding-top: 18px;
   padding-inline: 31px;
+  padding-bottom: 8px;
   font-family: var(--app-font-family);
   font-weight: 700;
   font-size: 36px;
   color: #000;
   text-align: center;
+  flex-shrink: 0;
 }
 
 .terms-modal-body {
-  flex: 1;
+  flex: 1 1 auto;
   min-height: 0;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
   position: relative;
-  padding: 12px 12px 12px;
+  padding: 8px 12px 12px;
 }
 
 .terms-modal-download-btn {
@@ -732,8 +740,11 @@
 }
 
 .terms-modal-pdf {
+  display: block;
   width: 100%;
+  min-height: 55vh;
   height: 100%;
+  max-height: none;
   border: 0;
   border-radius: 10px;
   background: #fff;

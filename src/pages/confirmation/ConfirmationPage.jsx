@@ -116,11 +116,11 @@ export function ConfirmationPage() {
               </div>
             </div>
           </div>
-        </div>
 
-        <footer className="confirmation-footer-brand">
-          <img src={playgroundLogo} alt="Playground" className="confirmation-playground-logo" />
-        </footer>
+          <footer className="confirmation-footer-brand">
+            <img src={playgroundLogo} alt="Playground" className="confirmation-playground-logo" />
+          </footer>
+        </div>
       </section>
     </main>
   )

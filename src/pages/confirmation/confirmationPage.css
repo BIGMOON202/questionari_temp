@@ -1,14 +1,15 @@
 .confirmation-page {
   min-height: 100svh;
-  height: 100svh;
-  height: 100dvh;
+  min-height: 100dvh;
   background: #fff;
   display: flex;
   justify-content: center;
   padding: 0;
   box-sizing: border-box;
   font-family: var(--app-font-family);
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   color: #1b1b24;
   position: relative;
 }
@@ -105,15 +106,16 @@
   background: #fff;
   display: flex;
   flex-direction: column;
-  min-height: 0;
-  flex: 1;
+  min-height: min(100dvh, 100%);
+  flex: 1 0 auto;
 }
 
 .confirmation-scroll {
-  flex: 1;
+  flex: 1 0 auto;
   min-height: 0;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
 }
 
 .confirmation-header-logo {
@@ -262,8 +264,9 @@
 }
 
 .confirmation-footer-brand {
-  flex-shrink: 0;
-  padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  margin-top: 32px;
+  padding-top: 8px;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
   display: flex;
   justify-content: center;
 }
