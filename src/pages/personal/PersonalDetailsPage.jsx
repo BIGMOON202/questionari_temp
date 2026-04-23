@@ -493,12 +493,30 @@ export function PersonalDetailsPage() {
                   >
                     הורדת התקנון
                   </a>
-                  <iframe
+                  <object
                     className="terms-modal-pdf"
-                    title={termsDocConfig.title}
-                    src={`${termsDocConfig.src}#toolbar=0&navpanes=0&scrollbar=1`}
-                    loading="lazy"
-                  />
+                    data={termsDocConfig.src}
+                    type="application/pdf"
+                    aria-label={termsDocConfig.title}
+                  >
+                    <embed
+                      src={termsDocConfig.src}
+                      type="application/pdf"
+                      className="terms-modal-pdf"
+                      aria-label={termsDocConfig.title}
+                    />
+                    <div className="terms-modal-pdf-fallback">
+                      <p>לא ניתן להציג את התקנון בדפדפן זה.</p>
+                      <a
+                        href={termsDocConfig.src}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="terms-modal-download-inline"
+                      >
+                        פתיחת התקנון
+                      </a>
+                    </div>
+                  </object>
                 </div>
               </div>
             </div>,

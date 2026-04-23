@@ -27,7 +27,7 @@
   min-height: 0;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
   display: flex;
   flex-direction: column;
 }
@@ -241,7 +241,7 @@
 .invoice-fab {
   position: fixed;
   z-index: 1000;
-  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  bottom: calc(74px + env(safe-area-inset-bottom, 0px));
   left: 50%;
   transform: translateX(-50%);
   width: min(342px, calc(100vw - 32px));

@@ -8,6 +8,34 @@ import cameraIcon from '../../assets/images/camera.png'
 import { invoicesBucket, supabase } from '../../lib/supabaseClient.js'
 import './invoicePage.css'
 
+function pad2(value) {
+  return String(value).padStart(2, '0')
+}
+
+function formatElapsedSecondsToMmSs(totalSeconds) {
+  const safeSeconds = Math.max(1, Number(totalSeconds) || 1)
+  const minutes = Math.floor(safeSeconds / 60)
+  const seconds = safeSeconds % 60
+  return `${pad2(minutes)}:${pad2(seconds)}`
+}
+
+function formatDateToDdMmYyyyHhMm(dateValue) {
+  const date = dateValue instanceof Date ? dateValue : new Date(dateValue)
+  return `${pad2(date.getDate())}/${pad2(date.getMonth() + 1)}/${date.getFullYear()} ${pad2(date.getHours())}:${pad2(date.getMinutes())}`
+}
+
+async function buildInvoiceAccessUrl(filePath) {
+  const storage = supabase.storage.from(invoicesBucket)
+  const { data: publicData } = storage.getPublicUrl(filePath)
+  const publicUrl = publicData?.publicUrl ?? ''
+
+  const { data: signedData } = await storage.createSignedUrl(filePath, 60 * 60 * 24 * 365 * 5)
+  const signedUrl = signedData?.signedUrl ?? ''
+
+  // Prefer signed URL so links work even when bucket is private.
+  return signedUrl || publicUrl
+}
+
 export function InvoicePage() {
   const navigate = useNavigate()
   const brand = useBrand()
@@ -79,6 +107,9 @@ export function InvoicePage() {
       const personalDetails = JSON.parse(personalDetailsRaw)
       const answers = JSON.parse(answersRaw)
       const elapsedSeconds = Math.max(1, Number(sessionStorage.getItem('submissionElapsedSeconds') ?? 1))
+      const elapsedMmSs = formatElapsedSecondsToMmSs(elapsedSeconds)
+      const createdAt = new Date()
+      const createdAtFormatted = formatDateToDdMmYyyyHhMm(createdAt)
       const referenceNumber = String(Math.floor(10000 + Math.random() * 90000))
 
       const fileExt = invoiceFile.name.split('.').pop() || 'jpg'
@@ -89,8 +120,7 @@ export function InvoicePage() {
 
       if (uploadError) throw uploadError
 
-      const { data: publicData } = supabase.storage.from(invoicesBucket).getPublicUrl(filePath)
-      const invoicePublicUrl = publicData?.publicUrl ?? ''
+      const invoicePublicUrl = await buildInvoiceAccessUrl(filePath)
 
       const submissionPayload = {
         full_name: personalDetails.fullName,
@@ -100,7 +130,9 @@ export function InvoicePage() {
         birth_date: personalDetails.birthDate,
         accepted_terms: sessionStorage.getItem('acceptedTerms') === 'true',
         answers,
-        elapsed_seconds: elapsedSeconds,
+        elapsed_seconds: elapsedMmSs,
+        created_at: createdAt.toISOString(),
+        created_at_display: createdAtFormatted,
         reference_number: referenceNumber,
         invoice_storage_path: filePath,
         invoice_public_url: invoicePublicUrl,
