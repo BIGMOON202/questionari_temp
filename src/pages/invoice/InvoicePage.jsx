@@ -160,12 +160,21 @@ export function InvoicePage() {
     <main className="invoice-page" dir="rtl">
       <section className="invoice-card">
         <div className="invoice-scroll">
-          <header className="invoice-header">
+          <header
+            className={`invoice-header${brand.slug === 'superpharm' ? ' is-superpharm' : brand.slug === 'ramilevygoodpharm' ? ' is-rami-good-pharm' : brand.slug === 'yochananof' ? ' is-yochananof' : ''}`}
+          >
             <img
               className="invoice-header-logo"
               src={logo}
               alt={`לוגו מבצע ${campaignName}`}
             />
+            {brand.slug === 'superpharm' ? (
+              <span className="invoice-header-brand-stack" aria-hidden="true" />
+            ) : brand.slug === 'ramilevygoodpharm' ? (
+              <span className="invoice-header-brand-stack invoice-header-brand-stack--rami" aria-hidden="true" />
+            ) : brand.slug === 'yochananof' ? (
+              <span className="invoice-header-brand-stack invoice-header-brand-stack--yochananof" aria-hidden="true" />
+            ) : null}
           </header>
 
           <div className="invoice-content">
@@ -222,7 +231,11 @@ export function InvoicePage() {
               {errorMessage && <p className="invoice-error">{errorMessage}</p>}
             </section>
 
-            <div className="invoice-fab-slot" aria-hidden />
+            <div className="invoice-actions">
+              <button type="button" className="invoice-cta" onClick={handleFinish} disabled={isSubmitting}>
+                {isSubmitting ? 'שולח...' : 'סיום'}
+              </button>
+            </div>
 
             <footer className="invoice-footer-brand">
               <img src={playgroundLogo} alt="Playground" className="invoice-playground-logo" />
@@ -230,12 +243,6 @@ export function InvoicePage() {
           </div>
         </div>
       </section>
-      {createPortal(
-        <button type="button" className="invoice-cta invoice-fab" onClick={handleFinish} disabled={isSubmitting}>
-          {isSubmitting ? 'שולח...' : 'סיום'}
-        </button>,
-        document.body,
-      )}
       {isPickerOpen &&
         createPortal(
           <div className="invoice-picker-root" role="dialog" aria-modal="true" aria-label="בחירת מקור לחשבונית">

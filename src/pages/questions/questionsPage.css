@@ -33,9 +33,93 @@
 }
 
 .questions-header {
+  position: relative;
   width: 100%;
   margin: 0;
   padding: 0;
+}
+
+.questions-header.is-superpharm {
+  margin-bottom: 14.9254%;
+}
+
+.questions-header.is-rami-good-pharm {
+  margin-bottom: 13.0597%;
+}
+
+.questions-header.is-yochananof {
+  margin-bottom: 18.6567%;
+}
+
+.questions-header-brand-stack {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.questions-header-brand-stack::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 14.9254%;
+  width: 34.8601%;
+  aspect-ratio: 137 / 81;
+  background: url('../../assets/images/Soad_Clear_logo.png') center / contain no-repeat;
+  transform: translateX(-50%);
+}
+
+.questions-header-brand-stack::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -14.9254%;
+  height: 29.8507%;
+  aspect-ratio: 157 / 40;
+  background: url('../../assets/images/Super_Pharm_Logo.png') center / contain no-repeat;
+  transform: translateX(-50%);
+}
+
+.questions-header-brand-stack--rami::before {
+  bottom: 13.0597%;
+}
+
+.questions-header-brand-stack--rami::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -13.0597%;
+  height: 26.1194%;
+  aspect-ratio: 194 / 35;
+  background: url('../../assets/images/Ramilevy_logo.png') center / contain no-repeat;
+  transform: translateX(-50%);
+}
+
+.questions-header-brand-stack--yochananof::before {
+  bottom: 18.6567%;
+}
+
+.questions-header-brand-stack--yochananof::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -18.6567%;
+  height: 37.3134%;
+  aspect-ratio: 100 / 50;
+  background: url('../../assets/images/yochananof_logo.png') center / contain no-repeat;
+  transform: translateX(-50%);
+}
+
+.questions-header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 46.2687%;
+  background: linear-gradient(0deg, #f8fafc 0%, rgba(255, 255, 255, 0) 50%, rgba(248, 250, 252, 0) 100%);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .questions-header-logo {
@@ -130,10 +214,33 @@
   outline-offset: 2px;
 }
 
-.questions-fab-slot {
-  flex-shrink: 0;
-  min-height: calc(68px + 32px);
-  pointer-events: none;
+.questions-actions {
+  margin-top: 24px;
+}
+
+.questions-cta {
+  width: min(342px, 100%);
+  height: 68px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0148a7 0%, #5e5cff 100%);
+  color: #fff;
+  font-size: 22px;
+  font-weight: 700;
+  font-family: inherit;
+  box-shadow:
+    0 8px 10px -6px #c7d2fe,
+    0 20px 25px -5px #c7d2fe;
+}
+
+.questions-cta:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
 .questions-footer-brand {
@@ -146,20 +253,5 @@
   height: 39px;
   width: auto;
   opacity: 0.85;
-}
-
-.questions-fab {
-  position: fixed;
-  z-index: 1000;
-  bottom: calc(74px + env(safe-area-inset-bottom, 0px));
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(342px, calc(100vw - 32px));
-  margin: 0;
-}
-
-.questions-fab:active {
-  animation: none;
-  transform: translateX(-50%) scale(0.98);
 }
 

@@ -219,8 +219,17 @@ export function PersonalDetailsPage() {
       <main className="personal-page" dir="rtl">
         <section className="personal-card">
           <div className="personal-scroll">
-          <header className="personal-header">
+          <header
+            className={`personal-header${brand.slug === 'superpharm' ? ' is-superpharm' : brand.slug === 'ramilevygoodpharm' ? ' is-rami-good-pharm' : brand.slug === 'yochananof' ? ' is-yochananof' : ''}`}
+          >
             <img className="personal-header-logo" src={logo} alt={`לוגו מבצע ${campaignName}`} />
+            {brand.slug === 'superpharm' ? (
+              <span className="personal-header-brand-stack" aria-hidden="true" />
+            ) : brand.slug === 'ramilevygoodpharm' ? (
+              <span className="personal-header-brand-stack personal-header-brand-stack--rami" aria-hidden="true" />
+            ) : brand.slug === 'yochananof' ? (
+              <span className="personal-header-brand-stack personal-header-brand-stack--yochananof" aria-hidden="true" />
+            ) : null}
           </header>
 
           <div className="personal-content">

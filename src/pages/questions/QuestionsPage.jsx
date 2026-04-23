@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import { useBrand } from '../../context/BrandContext.jsx'
 import playgroundLogo from '../../assets/images/playground.png'
@@ -41,8 +40,17 @@ export function QuestionsPage() {
     <main className="questions-page" dir="rtl">
       <section className="questions-card">
         <div className="questions-scroll">
-          <header className="questions-header">
+          <header
+            className={`questions-header${brand.slug === 'superpharm' ? ' is-superpharm' : brand.slug === 'ramilevygoodpharm' ? ' is-rami-good-pharm' : brand.slug === 'yochananof' ? ' is-yochananof' : ''}`}
+          >
             <img className="questions-header-logo" src={logo} alt={`לוגו מבצע ${campaignName}`} />
+            {brand.slug === 'superpharm' ? (
+              <span className="questions-header-brand-stack" aria-hidden="true" />
+            ) : brand.slug === 'ramilevygoodpharm' ? (
+              <span className="questions-header-brand-stack questions-header-brand-stack--rami" aria-hidden="true" />
+            ) : brand.slug === 'yochananof' ? (
+              <span className="questions-header-brand-stack questions-header-brand-stack--yochananof" aria-hidden="true" />
+            ) : null}
           </header>
 
           <div className="questions-content">
@@ -94,7 +102,11 @@ export function QuestionsPage() {
               </div>
             </section>
 
-            <div className="questions-fab-slot" aria-hidden />
+            <div className="questions-actions">
+              <button type="button" className="questions-cta" disabled={!selected} onClick={goNext}>
+                לשלב הבא
+              </button>
+            </div>
 
             <footer className="questions-footer-brand">
               <img src={playgroundLogo} alt="Playground" className="questions-playground-logo" />
@@ -102,12 +114,6 @@ export function QuestionsPage() {
           </div>
         </div>
       </section>
-      {createPortal(
-        <button type="button" className="personal-cta questions-fab" disabled={!selected} onClick={goNext}>
-          לשלב הבא
-        </button>,
-        document.body,
-      )}
     </main>
   )
 }

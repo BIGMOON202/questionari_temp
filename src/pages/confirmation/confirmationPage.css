@@ -118,6 +118,93 @@
   padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
 }
 
+.confirmation-header {
+  position: relative;
+}
+
+.confirmation-header.is-superpharm {
+  margin-bottom: 14.9254%;
+}
+
+.confirmation-header.is-rami-good-pharm {
+  margin-bottom: 13.0597%;
+}
+
+.confirmation-header.is-yochananof {
+  margin-bottom: 18.6567%;
+}
+
+.confirmation-header-brand-stack {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.confirmation-header-brand-stack::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 14.9254%;
+  width: 34.8601%;
+  aspect-ratio: 137 / 81;
+  background: url('../../assets/images/Soad_Clear_logo.png') center / contain no-repeat;
+  transform: translateX(-50%);
+}
+
+.confirmation-header-brand-stack::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -14.9254%;
+  height: 29.8507%;
+  aspect-ratio: 157 / 40;
+  background: url('../../assets/images/Super_Pharm_Logo.png') center / contain no-repeat;
+  transform: translateX(-50%);
+}
+
+.confirmation-header-brand-stack--rami::before {
+  bottom: 13.0597%;
+}
+
+.confirmation-header-brand-stack--rami::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -13.0597%;
+  height: 26.1194%;
+  aspect-ratio: 194 / 35;
+  background: url('../../assets/images/Ramilevy_logo.png') center / contain no-repeat;
+  transform: translateX(-50%);
+}
+
+.confirmation-header-brand-stack--yochananof::before {
+  bottom: 18.6567%;
+}
+
+.confirmation-header-brand-stack--yochananof::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -18.6567%;
+  height: 37.3134%;
+  aspect-ratio: 100 / 50;
+  background: url('../../assets/images/yochananof_logo.png') center / contain no-repeat;
+  transform: translateX(-50%);
+}
+
+.confirmation-header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 46.2687%;
+  background: linear-gradient(0deg, #f8fafc 0%, rgba(255, 255, 255, 0) 50%, rgba(248, 250, 252, 0) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
 .confirmation-header-logo {
   width: 100%;
   height: auto;

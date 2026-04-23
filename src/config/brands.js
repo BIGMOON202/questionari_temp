@@ -1,6 +1,7 @@
-import logo1 from '../assets/images/logo1.png'
 import logo2 from '../assets/images/logo2.png'
 import logo3 from '../assets/images/logo3.png'
+import logoBg from '../assets/images/logo_bg.png'
+import logoBg2 from '../assets/images/logo_bg2.png'
 
 function submissionsTableFromEnv(specificKey, fallback) {
   const specific = import.meta.env[specificKey]
@@ -48,7 +49,7 @@ export const brands = {
     slug: 'superpharm',
     id: 'superpharm',
     campaignName: 'סופר-פארם',
-    logo: logo1,
+    logo: logoBg,
     submissionsTable: submissionsTableFromEnv(
       'VITE_SUPABASE_SUBMISSIONS_TABLE_SUPERPHARM',
       import.meta.env.VITE_SUPABASE_SUBMISSIONS_TABLE?.trim() || 'questionnaire_submissions',
@@ -97,7 +98,7 @@ export const brands = {
     slug: 'ramilevygoodpharm',
     id: 'ramilevygoodpharm',
     campaignName: 'רמי לוי / גוד פארם',
-    logo: logo2,
+    logo: logoBg2,
     submissionsTable: submissionsTableFromEnv(
       'VITE_SUPABASE_SUBMISSIONS_TABLE_RAMILEVY_GOOD_PHARM',
       'questionnaire_submissions_ramilevy_good_pharm',
@@ -150,7 +151,7 @@ export const brands = {
     slug: 'yochananof',
     id: 'yochananof',
     campaignName: 'יוחננוף',
-    logo: logo3,
+    logo: logoBg2,
     submissionsTable: submissionsTableFromEnv(
       'VITE_SUPABASE_SUBMISSIONS_TABLE_YOCHANANOF',
       'questionnaire_submissions_yochananof',
