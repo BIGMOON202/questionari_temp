@@ -130,6 +130,10 @@
 
 .questions-content {
   padding: 8px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
 }
 
 .question {
@@ -215,7 +219,8 @@
 }
 
 .questions-actions {
-  margin-top: 24px;
+  margin-top: auto;
+  padding-top: 24px;
 }
 
 .questions-cta {
