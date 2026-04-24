@@ -460,7 +460,11 @@ export function PersonalDetailsPage() {
               </label>
             </form>
 
-            <div className="personal-fab-slot" aria-hidden />
+            <div className="personal-actions">
+              <button type="button" className="personal-cta" disabled={!canProceed} onClick={goNext}>
+                לשלב הבא
+              </button>
+            </div>
 
             <footer className="personal-footer-brand">
               <img src={playgroundLogo} alt="Playground" className="personal-playground-logo" />
@@ -627,12 +631,6 @@ export function PersonalDetailsPage() {
             document.body,
           )}
       </main>
-      {createPortal(
-        <button type="button" className="personal-cta personal-fab" disabled={!canProceed} onClick={goNext}>
-          לשלב הבא
-        </button>,
-        document.body,
-      )}
     </>
   )
 }
