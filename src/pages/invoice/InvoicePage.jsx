@@ -161,20 +161,13 @@ export function InvoicePage() {
       <section className="invoice-card">
         <div className="invoice-scroll">
           <header
-            className={`invoice-header${brand.slug === 'superpharm' ? ' is-superpharm' : brand.slug === 'ramilevygoodpharm' ? ' is-rami-good-pharm' : brand.slug === 'yochananof' ? ' is-yochananof' : ''}`}
+            className="invoice-header"
           >
             <img
               className="invoice-header-logo"
               src={logo}
               alt={`לוגו מבצע ${campaignName}`}
             />
-            {brand.slug === 'superpharm' ? (
-              <span className="invoice-header-brand-stack" aria-hidden="true" />
-            ) : brand.slug === 'ramilevygoodpharm' ? (
-              <span className="invoice-header-brand-stack invoice-header-brand-stack--rami" aria-hidden="true" />
-            ) : brand.slug === 'yochananof' ? (
-              <span className="invoice-header-brand-stack invoice-header-brand-stack--yochananof" aria-hidden="true" />
-            ) : null}
           </header>
 
           <div className="invoice-content">

@@ -79,17 +79,8 @@ export function HomePage() {
       <main className="mobile-home" dir="rtl">
         <section className="mobile-card">
           <div ref={scrollRef} className="mobile-home-scroll">
-            <header
-              className={`top-logo-wrap${brand.slug === 'superpharm' ? ' is-superpharm' : brand.slug === 'ramilevygoodpharm' ? ' is-rami-good-pharm' : brand.slug === 'yochananof' ? ' is-yochananof' : ''}`}
-            >
+            <header className="top-logo-wrap">
               <img className="top-logo" src={logo} alt={`לוגו מבצע ${campaignName}`} />
-              {brand.slug === 'superpharm' ? (
-                <span className="top-logo-brand-stack" aria-hidden="true" />
-              ) : brand.slug === 'ramilevygoodpharm' ? (
-                <span className="top-logo-brand-stack top-logo-brand-stack--rami" aria-hidden="true" />
-              ) : brand.slug === 'yochananof' ? (
-                <span className="top-logo-brand-stack top-logo-brand-stack--yochananof" aria-hidden="true" />
-              ) : null}
             </header>
             <div className="mobile-home-content">
               <header className="hero">

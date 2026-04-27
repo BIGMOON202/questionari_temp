@@ -41,16 +41,9 @@ export function QuestionsPage() {
       <section className="questions-card">
         <div className="questions-scroll">
           <header
-            className={`questions-header${brand.slug === 'superpharm' ? ' is-superpharm' : brand.slug === 'ramilevygoodpharm' ? ' is-rami-good-pharm' : brand.slug === 'yochananof' ? ' is-yochananof' : ''}`}
+            className="questions-header"
           >
             <img className="questions-header-logo" src={logo} alt={`לוגו מבצע ${campaignName}`} />
-            {brand.slug === 'superpharm' ? (
-              <span className="questions-header-brand-stack" aria-hidden="true" />
-            ) : brand.slug === 'ramilevygoodpharm' ? (
-              <span className="questions-header-brand-stack questions-header-brand-stack--rami" aria-hidden="true" />
-            ) : brand.slug === 'yochananof' ? (
-              <span className="questions-header-brand-stack questions-header-brand-stack--yochananof" aria-hidden="true" />
-            ) : null}
           </header>
 
           <div className="questions-content">

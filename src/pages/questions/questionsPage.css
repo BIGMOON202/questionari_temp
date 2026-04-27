@@ -39,87 +39,8 @@
   padding: 0;
 }
 
-.questions-header.is-superpharm {
-  margin-bottom: 5.0891%;
-}
-
-.questions-header.is-rami-good-pharm {
-  margin-bottom: 4.4530%;
-}
-
-.questions-header.is-yochananof {
-  margin-bottom: 6.3613%;
-}
-
-.questions-header-brand-stack {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 2;
-}
-
-.questions-header-brand-stack::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  bottom: 14.9254%;
-  width: 34.8601%;
-  aspect-ratio: 137 / 81;
-  background: url('../../assets/images/Soad_Clear_logo.png') center / contain no-repeat;
-  transform: translateX(-50%);
-}
-
-.questions-header-brand-stack::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  bottom: -14.9254%;
-  height: 29.8507%;
-  aspect-ratio: 157 / 40;
-  background: url('../../assets/images/Super_Pharm_Logo.png') center / contain no-repeat;
-  transform: translateX(-50%);
-}
-
-.questions-header-brand-stack--rami::before {
-  bottom: 13.0597%;
-}
-
-.questions-header-brand-stack--rami::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  bottom: -13.0597%;
-  height: 26.1194%;
-  aspect-ratio: 194 / 35;
-  background: url('../../assets/images/Ramilevy_logo.png') center / contain no-repeat;
-  transform: translateX(-50%);
-}
-
-.questions-header-brand-stack--yochananof::before {
-  bottom: 18.6567%;
-}
-
-.questions-header-brand-stack--yochananof::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  bottom: -18.6567%;
-  height: 37.3134%;
-  aspect-ratio: 100 / 50;
-  background: url('../../assets/images/yochananof_logo.png') center / contain no-repeat;
-  transform: translateX(-50%);
-}
-
 .questions-header::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 46.2687%;
-  background: linear-gradient(0deg, #f8fafc 0%, rgba(255, 255, 255, 0) 50%, rgba(248, 250, 252, 0) 100%);
-  pointer-events: none;
-  z-index: 1;
+  content: none;
 }
 
 .questions-header-logo {

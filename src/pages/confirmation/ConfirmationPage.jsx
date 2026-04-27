@@ -55,20 +55,13 @@ export function ConfirmationPage() {
       <section className="confirmation-card">
         <div className="confirmation-scroll">
           <header
-            className={`confirmation-header${brand.slug === 'superpharm' ? ' is-superpharm' : brand.slug === 'ramilevygoodpharm' ? ' is-rami-good-pharm' : brand.slug === 'yochananof' ? ' is-yochananof' : ''}`}
+            className="confirmation-header"
           >
             <img
               className="confirmation-header-logo"
               src={logo}
               alt={`לוגו מבצע ${campaignName}`}
             />
-            {brand.slug === 'superpharm' ? (
-              <span className="confirmation-header-brand-stack" aria-hidden="true" />
-            ) : brand.slug === 'ramilevygoodpharm' ? (
-              <span className="confirmation-header-brand-stack confirmation-header-brand-stack--rami" aria-hidden="true" />
-            ) : brand.slug === 'yochananof' ? (
-              <span className="confirmation-header-brand-stack confirmation-header-brand-stack--yochananof" aria-hidden="true" />
-            ) : null}
           </header>
 
           <div className="confirmation-content">
