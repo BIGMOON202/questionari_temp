@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import { useBrand } from '../../context/BrandContext.jsx'
 import questionIcon from '../../assets/images/icon1.png'
-import playgroundLogo from '../../assets/images/playground.png'
+import playgroundLogo from '../../assets/images/playground_new.svg'
 import './homePage.css'
 
 export function HomePage() {

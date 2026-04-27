@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useBrand } from '../../context/BrandContext.jsx'
-import playgroundLogo from '../../assets/images/playground.png'
+import playgroundLogo from '../../assets/images/playground_new.svg'
 import successMarkIcon from '../../assets/images/success_mark.png'
 import timerRightIcon from '../../assets/images/timer_right.png'
 import timerLeftIcon from '../../assets/images/timer_left.png'

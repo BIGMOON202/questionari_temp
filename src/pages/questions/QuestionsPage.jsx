@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useBrand } from '../../context/BrandContext.jsx'
-import playgroundLogo from '../../assets/images/playground.png'
+import playgroundLogo from '../../assets/images/playground_new.svg'
 import './questionsPage.css'
 
 export function QuestionsPage() {
