@@ -11,6 +11,7 @@ export function QuestionsPage() {
 
   const [activeIndex, setActiveIndex] = useState(0)
   const [answers, setAnswers] = useState({})
+  const [isHeaderLogoLoaded, setIsHeaderLogoLoaded] = useState(false)
 
   const activeQuestion = questions[activeIndex]
   const selected = answers[activeQuestion.id]
@@ -41,9 +42,15 @@ export function QuestionsPage() {
       <section className="questions-card">
         <div className="questions-scroll">
           <header
-            className="questions-header"
+            className={`questions-header${isHeaderLogoLoaded ? '' : ' is-loading'}`}
           >
-            <img className="questions-header-logo" src={logo} alt={`לוגו מבצע ${campaignName}`} />
+            <img
+              className={`questions-header-logo${isHeaderLogoLoaded ? ' is-loaded' : ''}`}
+              src={logo}
+              alt={`לוגו מבצע ${campaignName}`}
+              onLoad={() => setIsHeaderLogoLoaded(true)}
+              onError={() => setIsHeaderLogoLoaded(true)}
+            />
           </header>
 
           <div className="questions-content">

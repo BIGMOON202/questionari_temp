@@ -31,6 +31,7 @@ export function ConfirmationPage() {
   const { elapsedSeconds, refNumber } = useMemo(() => getSubmissionData(), [])
   const formattedDuration = useMemo(() => formatDuration(elapsedSeconds), [elapsedSeconds])
   const [showCelebration, setShowCelebration] = useState(true)
+  const [isHeaderLogoLoaded, setIsHeaderLogoLoaded] = useState(false)
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
@@ -55,12 +56,14 @@ export function ConfirmationPage() {
       <section className="confirmation-card">
         <div className="confirmation-scroll">
           <header
-            className="confirmation-header"
+            className={`confirmation-header${isHeaderLogoLoaded ? '' : ' is-loading'}`}
           >
             <img
-              className="confirmation-header-logo"
+              className={`confirmation-header-logo${isHeaderLogoLoaded ? ' is-loaded' : ''}`}
               src={logo}
               alt={`לוגו מבצע ${campaignName}`}
+              onLoad={() => setIsHeaderLogoLoaded(true)}
+              onError={() => setIsHeaderLogoLoaded(true)}
             />
           </header>
 

@@ -58,6 +58,7 @@ export function InvoicePage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [isPickerOpen, setIsPickerOpen] = useState(false)
+  const [isHeaderLogoLoaded, setIsHeaderLogoLoaded] = useState(false)
   const galleryInputRef = useRef(null)
   const cameraInputRef = useRef(null)
   const fileInputRef = useRef(null)
@@ -174,12 +175,14 @@ export function InvoicePage() {
       <section className="invoice-card">
         <div className="invoice-scroll">
           <header
-            className="invoice-header"
+            className={`invoice-header${isHeaderLogoLoaded ? '' : ' is-loading'}`}
           >
             <img
-              className="invoice-header-logo"
+              className={`invoice-header-logo${isHeaderLogoLoaded ? ' is-loaded' : ''}`}
               src={logo}
               alt={`לוגו מבצע ${campaignName}`}
+              onLoad={() => setIsHeaderLogoLoaded(true)}
+              onError={() => setIsHeaderLogoLoaded(true)}
             />
           </header>
 

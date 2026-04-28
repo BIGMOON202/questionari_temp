@@ -36,14 +36,33 @@
   position: relative;
 }
 
-.invoice-header::after {
-  content: none;
+.invoice-header.is-loading {
+  aspect-ratio: 393 / 134;
+  overflow: hidden;
+  background: linear-gradient(90deg, #eef1f7 25%, #f7f9fd 50%, #eef1f7 75%);
+  background-size: 200% 100%;
+  animation: header-skeleton-shimmer 1.2s ease-in-out infinite;
 }
 
 .invoice-header-logo {
   width: 100%;
   height: auto;
   display: block;
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+
+.invoice-header-logo.is-loaded {
+  opacity: 1;
+}
+
+@keyframes header-skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 .invoice-content {

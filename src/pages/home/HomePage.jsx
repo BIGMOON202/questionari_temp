@@ -18,6 +18,7 @@ export function HomePage() {
   const afterStepsRef = useRef(null)
   const [ctaReady, setCtaReady] = useState(false)
   const [ctaInFinalPosition, setCtaInFinalPosition] = useState(false)
+  const [isHeaderLogoLoaded, setIsHeaderLogoLoaded] = useState(false)
 
   const updateCtaReadiness = useCallback(() => {
     const scrollEl = scrollRef.current
@@ -79,8 +80,14 @@ export function HomePage() {
       <main className="mobile-home" dir="rtl">
         <section className="mobile-card">
           <div ref={scrollRef} className="mobile-home-scroll">
-            <header className="top-logo-wrap">
-              <img className="top-logo" src={logo} alt={`לוגו מבצע ${campaignName}`} />
+            <header className={`top-logo-wrap${isHeaderLogoLoaded ? '' : ' is-loading'}`}>
+              <img
+                className={`top-logo${isHeaderLogoLoaded ? ' is-loaded' : ''}`}
+                src={logo}
+                alt={`לוגו מבצע ${campaignName}`}
+                onLoad={() => setIsHeaderLogoLoaded(true)}
+                onError={() => setIsHeaderLogoLoaded(true)}
+              />
             </header>
             <div className="mobile-home-content">
               <header className="hero">

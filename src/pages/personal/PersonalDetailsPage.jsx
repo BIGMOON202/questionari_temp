@@ -62,6 +62,7 @@ export function PersonalDetailsPage() {
   const [activeTermsDoc, setActiveTermsDoc] = useState('default')
   const [isBirthDateModalOpen, setIsBirthDateModalOpen] = useState(false)
   const [isNetworkDropdownOpen, setIsNetworkDropdownOpen] = useState(false)
+  const [isHeaderLogoLoaded, setIsHeaderLogoLoaded] = useState(false)
   const [birthDateView, setBirthDateView] = useState(() => {
     const today = new Date()
     return { month: today.getMonth(), year: today.getFullYear() }
@@ -219,8 +220,14 @@ export function PersonalDetailsPage() {
       <main className="personal-page" dir="rtl">
         <section className="personal-card">
           <div className="personal-scroll">
-          <header className="personal-header">
-            <img className="personal-header-logo" src={logo} alt={`לוגו מבצע ${campaignName}`} />
+          <header className={`personal-header${isHeaderLogoLoaded ? '' : ' is-loading'}`}>
+            <img
+              className={`personal-header-logo${isHeaderLogoLoaded ? ' is-loaded' : ''}`}
+              src={logo}
+              alt={`לוגו מבצע ${campaignName}`}
+              onLoad={() => setIsHeaderLogoLoaded(true)}
+              onError={() => setIsHeaderLogoLoaded(true)}
+            />
           </header>
 
           <div className="personal-content">
