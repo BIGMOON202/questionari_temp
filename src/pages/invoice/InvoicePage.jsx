@@ -36,6 +36,20 @@ async function buildInvoiceAccessUrl(filePath) {
   return signedUrl || publicUrl
 }
 
+function mapNetworkForSubmission(brandSlug, networkValue) {
+  if (brandSlug === 'superpharm') return 'Superpharm'
+  if (brandSlug === 'yochananof') return 'Yochananof'
+  if (brandSlug !== 'ramilevygoodpharm') return ''
+
+  if (networkValue === 'rami-levy-shivuk-hashikma' || networkValue === 'רמי לוי שיווק השקמה') {
+    return 'Rami Levy'
+  }
+  if (networkValue === 'good-pharm' || networkValue === 'GOOD PHARM') {
+    return 'Good Pharm'
+  }
+  return networkValue || ''
+}
+
 export function InvoicePage() {
   const navigate = useNavigate()
   const brand = useBrand()
@@ -106,6 +120,7 @@ export function InvoicePage() {
 
       const personalDetails = JSON.parse(personalDetailsRaw)
       const answers = JSON.parse(answersRaw)
+      const networkForSubmission = mapNetworkForSubmission(brandSlug, personalDetails.network)
       const elapsedSeconds = Math.max(1, Number(sessionStorage.getItem('submissionElapsedSeconds') ?? 1))
       const elapsedMmSs = formatElapsedSecondsToMmSs(elapsedSeconds)
       const createdAt = new Date()
@@ -136,9 +151,7 @@ export function InvoicePage() {
         reference_number: referenceNumber,
         invoice_storage_path: filePath,
         invoice_public_url: invoicePublicUrl,
-        ...(personal.showNetworkSelect && personalDetails.network
-          ? { network: personalDetails.network }
-          : {}),
+        network: networkForSubmission,
       }
 
       const { error: insertError } = await supabase.from(submissionsTable).insert([submissionPayload])
