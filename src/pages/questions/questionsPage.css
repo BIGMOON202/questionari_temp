@@ -2,7 +2,9 @@
   min-height: 100svh;
   height: 100svh;
   height: 100dvh;
-  background: #fff;
+  background:
+    linear-gradient(0deg, #ffffff, #ffffff),
+    linear-gradient(180deg, #ffffff 0%, #f5f2ff 100%);
   display: flex;
   justify-content: center;
   padding: 0;
