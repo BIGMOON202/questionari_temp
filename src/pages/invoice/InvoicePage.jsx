@@ -140,10 +140,8 @@ export function InvoicePage() {
 
       const submissionPayload = {
         full_name: personalDetails.fullName,
-        id_number: personalDetails.idNumber,
         phone: personalDetails.phone,
         email: personalDetails.email,
-        birth_date: personalDetails.birthDate,
         accepted_terms: sessionStorage.getItem('acceptedTerms') === 'true',
         answers,
         elapsed_seconds: elapsedMmSs,
