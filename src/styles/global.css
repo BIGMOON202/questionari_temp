@@ -49,7 +49,12 @@ body,
 }
 
 body {
-  background: #efeff3;
+  background-color: #efeff3;
+  background-image: url('../assets/images/background.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
   font-family: var(--app-font-family);
 }
 
@@ -81,6 +86,7 @@ body {
 .questions-page,
 .invoice-page,
 .confirmation-page {
+  background: transparent !important;
   animation: page-enter 320ms ease-out both;
 }
 
