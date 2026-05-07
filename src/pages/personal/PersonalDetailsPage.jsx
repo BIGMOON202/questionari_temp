@@ -18,6 +18,10 @@ function buildInitialForm(showNetworkSelect) {
   }
 }
 
+function isValidEmail(value) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value.trim())
+}
+
 const termsDocsByBrand = {
   superpharm: {
     default: {
@@ -68,7 +72,11 @@ export function PersonalDetailsPage() {
     return requiredStrings.every(([, value]) => value.trim() !== '')
   }, [form])
 
-  const canProceed = isFormFilled && acceptedTerms
+  const emailValue = form.email.trim()
+  const hasEmailValue = emailValue !== ''
+  const emailIsValid = isValidEmail(emailValue)
+  const showEmailError = hasEmailValue && !emailIsValid
+  const canProceed = isFormFilled && acceptedTerms && emailIsValid
   const termsDocConfig =
     termsDocsByBrand[brand.slug]?.[activeTermsDoc] ??
     termsDocsByBrand[brand.slug]?.default ??
@@ -206,7 +214,9 @@ export function PersonalDetailsPage() {
                   placeholder="הקלידו כתובת מייל"
                   value={form.email}
                   onChange={(e) => updateField('email', e.target.value)}
+                  aria-invalid={showEmailError}
                 />
+                {showEmailError ? <p className="field-error">יש להזין כתובת מייל תקינה (לדוגמה: email@aa.com)</p> : null}
               </div>
               {showNetworkSelect ? (
                 <div className="field-group field-group--network">
