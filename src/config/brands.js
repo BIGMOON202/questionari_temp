@@ -1,6 +1,6 @@
-import superpharmTopLogo from '../assets/images/superpharm_toplogo_latest.svg'
-import ramilevyTopLogo from '../assets/images/ramilevy_toplogo_latest.svg'
-import yochananaofTopLogo from '../assets/images/yochananaof_toplogo_latest.svg'
+import superpharmTopLogo from '../assets/images/superpharm_4x.png'
+import ramilevyTopLogo from '../assets/images/ramilevy_4x.png'
+import yochananaofTopLogo from '../assets/images/yochananof_4x.png'
 
 function submissionsTableFromEnv(specificKey, fallback) {
   const specific = import.meta.env[specificKey]
