@@ -49,13 +49,18 @@ body,
 }
 
 body {
-  background-color: #efeff3;
-  background-image: url('../assets/images/BG.png');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  background-attachment: fixed;
+  background: #fff;
   font-family: var(--app-font-family);
+}
+
+.app-placeholder {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  color: #222;
+  font-size: 32px;
+  font-weight: 700;
 }
 
 @keyframes page-enter {
