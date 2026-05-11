@@ -17,7 +17,43 @@ create table if not exists public.questionnaire_submissions (
   invoice_public_url text not null
 );
 
--- Rami Levy / Good Pharm
+-- Rami Levy (split from legacy questionnaire_submissions_ramilevy_good_pharm)
+create table if not exists public.questionnaire_submissions_ramilevy (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  full_name text not null,
+  id_number text not null,
+  phone text not null,
+  email text not null,
+  birth_date text not null,
+  accepted_terms boolean not null default false,
+  answers jsonb not null,
+  elapsed_seconds integer not null,
+  reference_number text not null,
+  invoice_storage_path text not null,
+  invoice_public_url text not null,
+  network text null
+);
+
+-- Good Pharm
+create table if not exists public.questionnaire_submissions_goodpharm (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  full_name text not null,
+  id_number text not null,
+  phone text not null,
+  email text not null,
+  birth_date text not null,
+  accepted_terms boolean not null default false,
+  answers jsonb not null,
+  elapsed_seconds integer not null,
+  reference_number text not null,
+  invoice_storage_path text not null,
+  invoice_public_url text not null,
+  network text null
+);
+
+-- Legacy combined table (optional: migrate rows then drop)
 create table if not exists public.questionnaire_submissions_ramilevy_good_pharm (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
@@ -35,7 +71,7 @@ create table if not exists public.questionnaire_submissions_ramilevy_good_pharm 
   network text null
 );
 
--- Yochananof (no network column — only ramilevygoodpharm collects רשת)
+-- Yochananof
 create table if not exists public.questionnaire_submissions_yochananof (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
@@ -54,11 +90,19 @@ create table if not exists public.questionnaire_submissions_yochananof (
 
 -- Example RLS: allow anonymous inserts from the browser (tighten for production if needed)
 alter table public.questionnaire_submissions enable row level security;
+alter table public.questionnaire_submissions_ramilevy enable row level security;
+alter table public.questionnaire_submissions_goodpharm enable row level security;
 alter table public.questionnaire_submissions_ramilevy_good_pharm enable row level security;
 alter table public.questionnaire_submissions_yochananof enable row level security;
 
 create policy "Allow public insert questionnaire_submissions"
   on public.questionnaire_submissions for insert to anon with check (true);
+
+create policy "Allow public insert questionnaire_submissions_ramilevy"
+  on public.questionnaire_submissions_ramilevy for insert to anon with check (true);
+
+create policy "Allow public insert questionnaire_submissions_goodpharm"
+  on public.questionnaire_submissions_goodpharm for insert to anon with check (true);
 
 create policy "Allow public insert questionnaire_submissions_ramilevy_good_pharm"
   on public.questionnaire_submissions_ramilevy_good_pharm for insert to anon with check (true);

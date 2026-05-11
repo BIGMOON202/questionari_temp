@@ -1,5 +1,13 @@
 import { useEffect } from 'react'
-import { BrowserRouter, Navigate, Outlet, Route, Routes, useParams } from 'react-router-dom'
+import {
+  BrowserRouter,
+  Navigate,
+  Outlet,
+  Route,
+  Routes,
+  useLocation,
+  useParams,
+} from 'react-router-dom'
 import { getBrandBySlug } from '../config/brands.js'
 import { BrandContext } from '../context/BrandContext.jsx'
 import { HomePage } from '../pages/home/HomePage.jsx'
@@ -8,6 +16,14 @@ import { QuestionsPage } from '../pages/questions/QuestionsPage.jsx'
 import { InvoicePage } from '../pages/invoice/InvoicePage.jsx'
 import { ConfirmationPage } from '../pages/confirmation/ConfirmationPage.jsx'
 import soadClearLogo from '../assets/images/Soad_Clear_logo.png'
+
+function LegacyRamilevyGoodPharmRedirect() {
+  const location = useLocation()
+  const { '*': splat } = useParams()
+  const rest = (splat ?? '').replace(/^\/+/, '')
+  const to = rest ? `/ramilevy/${rest}` : '/ramilevy'
+  return <Navigate to={`${to}${location.search}${location.hash}`} replace />
+}
 
 function BrandLayout() {
   const { brand: brandSlug } = useParams()
@@ -19,7 +35,8 @@ function BrandLayout() {
   useEffect(() => {
     const titlesByBrand = {
       superpharm: 'Superpharm',
-      ramilevygoodpharm: 'Ramilevy Goodpharm',
+      ramilevy: 'Rami Levy',
+      goodpharm: 'Good Pharm',
       yochananof: 'Yochananof',
     }
     document.title = titlesByBrand[brand.slug] ?? 'Superpharm'
@@ -46,6 +63,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navigate to="/superpharm" replace />} />
+        <Route path="/ramilevygoodpharm" element={<Navigate to="/ramilevy" replace />} />
+        <Route path="/ramilevygoodpharm/*" element={<LegacyRamilevyGoodPharmRedirect />} />
         <Route path="/:brand" element={<BrandLayout />}>
           <Route index element={<HomePage />} />
           <Route path="personal" element={<PersonalDetailsPage />} />

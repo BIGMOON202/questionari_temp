@@ -29,18 +29,16 @@ const termsDocsByBrand = {
       src: superpharmRegulationsPdf,
     },
   },
-  ramilevygoodpharm: {
-    ramiLevy: {
+  ramilevy: {
+    default: {
       title: 'תקנון רמי לוי שיווק השקמה',
       src: ramiLevyRegulationsPdf,
     },
-    goodPharm: {
+  },
+  goodpharm: {
+    default: {
       title: 'תקנון GOOD PHARM',
       src: goodPharmRegulationsPdf,
-    },
-    default: {
-      title: 'תקנון רמי לוי / GOOD PHARM',
-      src: ramiLevyRegulationsPdf,
     },
   },
   yochananof: {
@@ -317,49 +315,20 @@ export function PersonalDetailsPage() {
                   checked={acceptedTerms}
                   onChange={(e) => setAcceptedTerms(e.target.checked)}
                 />
-                {personal.termsVariant === 'ramiGoodPharm' ? (
-                  <span className="terms-text" dir="rtl">
-                    <span className="terms-link-intro">אני מאשר/ת את </span>
-                    <a
-                      href="#"
-                      className="terms-link terms-link-line terms-link-line--inline"
-                      onClick={(e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                        openTermsModal('ramiLevy')
-                      }}
-                    >
-                      תקנון רמי לוי שיווק השקמה
-                    </a>
-                    <span aria-hidden="true"> / </span>
-                    <a
-                      href="#"
-                      className="terms-link terms-link-line terms-link-line--block"
-                      onClick={(e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                        openTermsModal('goodPharm')
-                      }}
-                    >
-                      תקנון GOOD PHARM
-                    </a>
-                  </span>
-                ) : (
-                  <span className="terms-text">
-                    אני מאשר/ת את{' '}
-                    <a
-                      href="#"
-                      className="terms-link"
-                      onClick={(e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                        openTermsModal('default')
-                      }}
-                    >
-                      תקנון התחרות
-                    </a>
-                  </span>
-                )}
+                <span className="terms-text">
+                  אני מאשר/ת את{' '}
+                  <a
+                    href="#"
+                    className="terms-link"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      openTermsModal('default')
+                    }}
+                  >
+                    תקנון התחרות
+                  </a>
+                </span>
               </label>
             </form>
 
@@ -397,7 +366,7 @@ export function PersonalDetailsPage() {
                   <span aria-hidden="true">×</span>
                 </button>
                 <h2 id="terms-modal-title" className="terms-modal-title">
-                  תקנון התחרות
+                  {termsDocConfig.title}
                 </h2>
                 <div className="terms-modal-body">
                   <a

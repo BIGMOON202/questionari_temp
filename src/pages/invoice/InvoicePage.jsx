@@ -39,7 +39,8 @@ async function buildInvoiceAccessUrl(filePath) {
 function mapNetworkForSubmission(brandSlug, networkValue) {
   if (brandSlug === 'superpharm') return 'Superpharm'
   if (brandSlug === 'yochananof') return 'Yochananof'
-  if (brandSlug !== 'ramilevygoodpharm') return ''
+  if (brandSlug === 'ramilevy') return 'Rami Levy'
+  if (brandSlug === 'goodpharm') return 'Good Pharm'
 
   if (networkValue === 'rami-levy-shivuk-hashikma' || networkValue === 'רמי לוי שיווק השקמה') {
     return 'Rami Levy'
@@ -53,7 +54,7 @@ function mapNetworkForSubmission(brandSlug, networkValue) {
 export function InvoicePage() {
   const navigate = useNavigate()
   const brand = useBrand()
-  const { logo, campaignName, submissionsTable, slug: brandSlug, personal } = brand
+  const { logo, campaignName, submissionsTable, slug: brandSlug } = brand
   const [invoiceFile, setInvoiceFile] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')

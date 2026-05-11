@@ -1,5 +1,6 @@
 import superpharmTopLogo from '../assets/images/superpharm_4x.png'
 import ramilevyTopLogo from '../assets/images/ramilevy_4x.png'
+import goodpharmTopLogo from '../assets/images/goodpharm_4x.png'
 import yochananaofTopLogo from '../assets/images/yochananof_4x.png'
 
 function submissionsTableFromEnv(specificKey, fallback) {
@@ -90,22 +91,21 @@ export const brands = {
     },
     personal: {
       showNetworkSelect: false,
-      termsVariant: 'default',
     },
   },
-  ramilevygoodpharm: {
-    slug: 'ramilevygoodpharm',
-    id: 'ramilevygoodpharm',
-    campaignName: 'רמי לוי / גוד פארם',
+  ramilevy: {
+    slug: 'ramilevy',
+    id: 'ramilevy',
+    campaignName: 'רמי לוי שיווק השקמה',
     logo: ramilevyTopLogo,
     submissionsTable: submissionsTableFromEnv(
-      'VITE_SUPABASE_SUBMISSIONS_TABLE_RAMILEVY_GOOD_PHARM',
-      'questionnaire_submissions_ramilevy_good_pharm',
+      'VITE_SUPABASE_SUBMISSIONS_TABLE_RAMILEVY',
+      'questionnaire_submissions_ramilevy',
     ),
     questions: superPharmQuestions,
     home: {
       heroLines: ['סוד מזמינה אותך להשתתף בתחרות ולזכות במגוון', 'פרסים שווים!'],
-      heroQuestionLines: ['רכשת לפחות 3 מוצרי סוד מרככים', 'מרוכזים ברשת רמי לוי או גוד פארם?'],
+      heroQuestionLines: ['רכשת לפחות 3 מוצרי סוד מרככים', 'מרוכזים ברשת רמי לוי שיווק השקמה?'],
       heroNoteLines: ['זו ההזדמנות שלך להשתתף בתחרות בלעדית', 'ולהתפנק בפרסים שווים במיוחד!'],
       prizes: [
         {
@@ -138,12 +138,55 @@ export const brands = {
       ],
     },
     personal: {
-      showNetworkSelect: true,
-      networkOptions: [
-        { id: 'rami-levy-shivuk-hashikma', label: 'רמי לוי שיווק השקמה' },
-        { id: 'good-pharm', label: 'GOOD PHARM' },
+      showNetworkSelect: false,
+    },
+  },
+  goodpharm: {
+    slug: 'goodpharm',
+    id: 'goodpharm',
+    campaignName: 'GOOD PHARM',
+    logo: goodpharmTopLogo,
+    submissionsTable: submissionsTableFromEnv(
+      'VITE_SUPABASE_SUBMISSIONS_TABLE_GOODPHARM',
+      'questionnaire_submissions_goodpharm',
+    ),
+    questions: superPharmQuestions,
+    home: {
+      heroLines: ['סוד מזמינה אותך להשתתף בתחרות ולזכות במגוון', 'פרסים שווים!'],
+      heroQuestionLines: ['רכשת לפחות 3 מוצרי סוד מרככים', 'מרוכזים ברשת GOOD PHARM?'],
+      heroNoteLines: ['זו ההזדמנות שלך להשתתף בתחרות בלעדית', 'ולהתפנק בפרסים שווים במיוחד!'],
+      prizes: [
+        {
+          place: 'מקום 1',
+          main: 'שובר ביימי בשווי 3,000 שקלים!',
+        },
+        {
+          place: 'מקום 2',
+          main: 'שובר ביימי בסך 1,000 שקלים!',
+          sub: 'ועשרת הזוכים הבאים יזכו במארז של סוד מרככים מרוכזים בשווי 400 שקלים!',
+        },
       ],
-      termsVariant: 'ramiGoodPharm',
+      participationSteps: [
+        {
+          id: 1,
+          title: 'ממלאים פרטים אישיים',
+          description: 'כל הפרטים נשמרים במערכת מאובטחת',
+        },
+        {
+          id: 2,
+          title: 'עונים על שאלון קצר',
+          description: 'התחרות מבוססת על זמן ומענה מדויק',
+        },
+        {
+          id: 3,
+          title: 'מעלים צילום חשבונית',
+          description:
+            'מעלים צילום של חשבונית המעידה על רכישה של לפחות 3 מוצרי סוד מרכך מרוכז',
+        },
+      ],
+    },
+    personal: {
+      showNetworkSelect: false,
     },
   },
   yochananof: {
@@ -192,7 +235,6 @@ export const brands = {
     },
     personal: {
       showNetworkSelect: false,
-      termsVariant: 'default',
     },
   },
 }
