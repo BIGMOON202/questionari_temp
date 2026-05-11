@@ -17,11 +17,11 @@ import { InvoicePage } from '../pages/invoice/InvoicePage.jsx'
 import { ConfirmationPage } from '../pages/confirmation/ConfirmationPage.jsx'
 import soadClearLogo from '../assets/images/Soad_Clear_logo.png'
 
-function LegacyRamilevyGoodPharmRedirect() {
+function LegacyGoodPharmSlugRedirect() {
   const location = useLocation()
   const { '*': splat } = useParams()
   const rest = (splat ?? '').replace(/^\/+/, '')
-  const to = rest ? `/ramilevy/${rest}` : '/ramilevy'
+  const to = rest ? `/ramilevygoodpharm/${rest}` : '/ramilevygoodpharm'
   return <Navigate to={`${to}${location.search}${location.hash}`} replace />
 }
 
@@ -36,7 +36,7 @@ function BrandLayout() {
     const titlesByBrand = {
       superpharm: 'Superpharm',
       ramilevy: 'Rami Levy',
-      goodpharm: 'Good Pharm',
+      ramilevygoodpharm: 'Good Pharm',
       yochananof: 'Yochananof',
     }
     document.title = titlesByBrand[brand.slug] ?? 'Superpharm'
@@ -63,8 +63,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navigate to="/superpharm" replace />} />
-        <Route path="/ramilevygoodpharm" element={<Navigate to="/ramilevy" replace />} />
-        <Route path="/ramilevygoodpharm/*" element={<LegacyRamilevyGoodPharmRedirect />} />
+        <Route path="/goodpharm" element={<Navigate to="/ramilevygoodpharm" replace />} />
+        <Route path="/goodpharm/*" element={<LegacyGoodPharmSlugRedirect />} />
         <Route path="/:brand" element={<BrandLayout />}>
           <Route index element={<HomePage />} />
           <Route path="personal" element={<PersonalDetailsPage />} />

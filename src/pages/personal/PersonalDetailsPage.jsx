@@ -35,7 +35,7 @@ const termsDocsByBrand = {
       src: ramiLevyRegulationsPdf,
     },
   },
-  goodpharm: {
+  ramilevygoodpharm: {
     default: {
       title: 'תקנון GOOD PHARM',
       src: goodPharmRegulationsPdf,

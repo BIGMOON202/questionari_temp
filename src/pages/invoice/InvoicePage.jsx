@@ -40,7 +40,7 @@ function mapNetworkForSubmission(brandSlug, networkValue) {
   if (brandSlug === 'superpharm') return 'Superpharm'
   if (brandSlug === 'yochananof') return 'Yochananof'
   if (brandSlug === 'ramilevy') return 'Rami Levy'
-  if (brandSlug === 'goodpharm') return 'Good Pharm'
+  if (brandSlug === 'ramilevygoodpharm') return 'Good Pharm'
 
   if (networkValue === 'rami-levy-shivuk-hashikma' || networkValue === 'רמי לוי שיווק השקמה') {
     return 'Rami Levy'

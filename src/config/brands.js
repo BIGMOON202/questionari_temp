@@ -141,9 +141,9 @@ export const brands = {
       showNetworkSelect: false,
     },
   },
-  goodpharm: {
-    slug: 'goodpharm',
-    id: 'goodpharm',
+  ramilevygoodpharm: {
+    slug: 'ramilevygoodpharm',
+    id: 'ramilevygoodpharm',
     campaignName: 'GOOD PHARM',
     logo: goodpharmTopLogo,
     submissionsTable: submissionsTableFromEnv(
