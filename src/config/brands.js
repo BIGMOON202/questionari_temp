@@ -9,6 +9,12 @@ function submissionsTableFromEnv(specificKey, fallback) {
   return fallback
 }
 
+/** Shared by `/ramilevy` and `/ramilevygoodpharm` — same Supabase target as the original combined flow. */
+const ramilevyGoodPharmSubmissionsTable = submissionsTableFromEnv(
+  'VITE_SUPABASE_SUBMISSIONS_TABLE_RAMILEVY_GOOD_PHARM',
+  'questionnaire_submissions_ramilevy_good_pharm',
+)
+
 /** @typedef {{ id: string; title: string; description: string }} ParticipationStep */
 /** @typedef {{ place: string; main: string; sub?: string }} PrizeItem */
 /** @typedef {{ id: string; title: string; options: string[]; layout?: 'grid' }} QuizQuestion */
@@ -98,10 +104,7 @@ export const brands = {
     id: 'ramilevy',
     campaignName: 'רמי לוי שיווק השקמה',
     logo: ramilevyTopLogo,
-    submissionsTable: submissionsTableFromEnv(
-      'VITE_SUPABASE_SUBMISSIONS_TABLE_RAMILEVY',
-      'questionnaire_submissions_ramilevy',
-    ),
+    submissionsTable: ramilevyGoodPharmSubmissionsTable,
     questions: superPharmQuestions,
     home: {
       heroLines: ['סוד מזמינה אותך להשתתף בתחרות ולזכות במגוון', 'פרסים שווים!'],
@@ -146,10 +149,7 @@ export const brands = {
     id: 'ramilevygoodpharm',
     campaignName: 'GOOD PHARM',
     logo: goodpharmTopLogo,
-    submissionsTable: submissionsTableFromEnv(
-      'VITE_SUPABASE_SUBMISSIONS_TABLE_GOODPHARM',
-      'questionnaire_submissions_goodpharm',
-    ),
+    submissionsTable: ramilevyGoodPharmSubmissionsTable,
     questions: superPharmQuestions,
     home: {
       heroLines: ['סוד מזמינה אותך להשתתף בתחרות ולזכות במגוון', 'פרסים שווים!'],
